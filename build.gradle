@@ -1,28 +1,26 @@
-buildscript {
-	ext {
-		springBootVersion = '1.5.2.RELEASE'
-	}
-	repositories {
-		mavenCentral()
-	}
-	dependencies {
-		classpath("org.springframework.boot:spring-boot-gradle-plugin:${springBootVersion}")
-	}
+description 'enjoy-diving-service module project'
+
+jar {
+    baseName = 'enjoy-diving-service'
+    version = '0.0.1-SNAPSHOT'
 }
-
-apply plugin: 'java'
-apply plugin: 'eclipse'
-apply plugin: 'org.springframework.boot'
-
-version = '0.0.1-SNAPSHOT'
-sourceCompatibility = 1.8
-
-repositories {
-	mavenCentral()
-}
-
 
 dependencies {
-	compile('org.springframework.boot:spring-boot-starter-security')
-	testCompile('org.springframework.boot:spring-boot-starter-test')
+    ext {
+        springBootVersion = '1.5.2.RELEASE'
+    }
+
+    compile project(':enjoy-diving-common')
+}
+
+eclipse {
+    classpath {
+        downloadSources = true
+        containers.remove('org.eclipse.jdt.launching.JRE_CONTAINER')
+        containers('org.eclipse.jdt.launching.JRE_CONTAINER/org.eclipse.jdt.internal.debug.ui.launcher.StandardVMType/JavaSE-1.8')
+    }
+}
+
+bootRepackage {
+    mainClass = 'kr.co.pjm.diving.service.Application'
 }
