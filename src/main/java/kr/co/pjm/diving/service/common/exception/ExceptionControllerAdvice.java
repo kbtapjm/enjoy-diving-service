@@ -22,13 +22,15 @@ import lombok.extern.slf4j.Slf4j;
 
 @Slf4j
 @RestController
-/*@ControllerAdvice*/
+@ControllerAdvice
 public class ExceptionControllerAdvice {
 
   @ExceptionHandler(value = MethodArgumentNotValidException.class)
   public ResponseEntity<ErrorDto> handleMethodArgumentNotValidException(HttpServletRequest req, MethodArgumentNotValidException e) {
     List<String> errors = e.getBindingResult().getAllErrors().stream().map(ObjectError::getDefaultMessage)
         .collect(Collectors.toList());
+    
+    if (log.isDebugEnabled()) log.debug("errors : {}", errors.toString()); 
 
     ErrorDto errorDto = new ErrorDto(errors.toString(), HttpStatus.BAD_REQUEST.value(), req.getRequestURI(), new Date());
     
@@ -58,6 +60,14 @@ public class ExceptionControllerAdvice {
     ErrorDto errorDto = new ErrorDto(e.getMessage(), HttpStatus.NOT_ACCEPTABLE.value(), req.getRequestURI(), new Date());
 
     return new ResponseEntity<ErrorDto>(errorDto, HttpStatus.NOT_ACCEPTABLE);
+  }
+  
+  @ExceptionHandler(value = Exception.class)
+  public ResponseEntity<ErrorDto> handlerException(HttpServletRequest req,Exception e) {
+
+    ErrorDto errorDto = new ErrorDto(e.getMessage(), HttpStatus.INTERNAL_SERVER_ERROR.value(), req.getRequestURI(), new Date());
+
+    return new ResponseEntity<ErrorDto>(errorDto, HttpStatus.INTERNAL_SERVER_ERROR);
   }
 
 }

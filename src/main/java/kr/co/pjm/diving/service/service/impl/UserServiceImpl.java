@@ -9,7 +9,6 @@ import org.springframework.transaction.annotation.Transactional;
 
 import kr.co.pjm.diving.common.domain.dto.UserBasicDto;
 import kr.co.pjm.diving.common.domain.dto.UserDiveDto;
-import kr.co.pjm.diving.common.domain.dto.UserDto;
 import kr.co.pjm.diving.common.domain.entity.Role;
 import kr.co.pjm.diving.common.domain.entity.User;
 import kr.co.pjm.diving.common.domain.entity.UserBasic;
@@ -23,7 +22,7 @@ import kr.co.pjm.diving.common.repository.UserBasicRepository;
 import kr.co.pjm.diving.common.repository.UserConnectionRepasitory;
 import kr.co.pjm.diving.common.repository.UserDiveRepository;
 import kr.co.pjm.diving.common.repository.UserRepository;
-import kr.co.pjm.diving.service.domain.dto.UserRequestDto;
+import kr.co.pjm.diving.service.domain.dto.UserDto;
 import kr.co.pjm.diving.service.service.UserService;
 import lombok.extern.slf4j.Slf4j;
 
@@ -54,19 +53,18 @@ public class UserServiceImpl implements UserService {
 
   @Override
   @Transactional
-  public User set(UserRequestDto userRequestDto) {
+  public User set(UserDto.Create create) {
     User user = new User();
-    user.setEmail(userRequestDto.getEmail());
-    user.setPassword(passwordEncoder.encode(userRequestDto.getPassword()));
+    user.setEmail(create.getEmail());
+    user.setPassword(passwordEncoder.encode(create.getPassword()));
     
     /* user basic create */
     UserBasic userBasic = new UserBasic();
-    userBasic.setName(userRequestDto.getName());
-    userBasic.setNickname(userRequestDto.getNickname());
-    userBasic.setGender(userRequestDto.getGender());
-    userBasic.setCountry(userRequestDto.getCountry());
+    userBasic.setName(create.getName());
+    userBasic.setNickname(create.getNickname());
+    userBasic.setGender(create.getGender());
+    userBasic.setCountry(create.getCountry());
     userBasic.setStatus(UserStatusEnum.NORMAL);
-    userBasic.setIntroduce(userRequestDto.getIntroduce());
     
     userBasicRepository.save(userBasic);
     
@@ -118,26 +116,26 @@ public class UserServiceImpl implements UserService {
 
   @Override
   @Transactional
-  public void update(UserDto userDto) {
+  public void update(Long id, UserDto.Update update) {
     /* user basic update */
     UserBasicDto userBasicDto = new UserBasicDto();
-    userBasicDto.setId(userDto.getId());
-    userBasicDto.setName(userDto.getName());
-    userBasicDto.setNickname(userDto.getNickname());
-    userBasicDto.setCountry(userDto.getCountry());
-    userBasicDto.setGender(userDto.getGender());
-    userBasicDto.setIntroduce(userDto.getIntroduce());
+    userBasicDto.setId(id);
+    userBasicDto.setName(update.getName());
+    userBasicDto.setNickname(update.getNickname());
+    userBasicDto.setCountry(update.getCountry());
+    userBasicDto.setGender(update.getGender());
+    userBasicDto.setIntroduce(update.getIntroduce());
     
     Long updateUserBasic = userBasicRepository.updateUserBasic(userBasicDto);
     log.debug("===> update updateUserBasic : {}", updateUserBasic);
     
     /* user dive update */
     UserDiveDto userDiveDto = new UserDiveDto();
-    userDiveDto.setId(userDto.getId());
-    userDiveDto.setDiveGroup(userDto.getDiveGroup());
-    userDiveDto.setDiveLevel(userDto.getDiveLevel());
-    userDiveDto.setTeam(userDto.getTeam());
-    userDiveDto.setSignature(userDto.getSignature());
+    userDiveDto.setId(id);
+    userDiveDto.setDiveGroup( update.getDiveGroup());
+    userDiveDto.setDiveLevel( update.getDiveLevel());
+    userDiveDto.setTeam( update.getTeam());
+    userDiveDto.setSignature( update.getSignature());
     
     Long updateUserDive = userDiveRepository.updateUserDive(userDiveDto);
     log.debug("===> update updateUserDive : {}", updateUserDive);
