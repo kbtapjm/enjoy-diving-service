@@ -18,6 +18,7 @@ import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.util.UriComponents;
 import org.springframework.web.util.UriComponentsBuilder;
 
+import io.swagger.annotations.ApiOperation;
 import kr.co.pjm.diving.common.domain.entity.User;
 import kr.co.pjm.diving.service.domain.dto.UserDto;
 import kr.co.pjm.diving.service.service.UserService;
@@ -34,9 +35,9 @@ public class UserController {
   private UserService userService;
 
   @PostMapping(consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
-  public ResponseEntity<?> create(@Valid @RequestBody UserDto.Create UserCreate, UriComponentsBuilder b, HttpServletRequest request)
+  public ResponseEntity<?> create(@Valid @RequestBody UserDto.Create userCreate, UriComponentsBuilder b, HttpServletRequest request)
       throws Exception {
-    User user = userService.set(UserCreate);
+    User user = userService.set(userCreate);
 
     UriComponents uriComponents = b.path(request.getRequestURI().toString()).buildAndExpand(user.getId());
     return ResponseEntity.created(uriComponents.toUri()).build();
