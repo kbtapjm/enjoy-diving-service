@@ -2,6 +2,7 @@ package kr.co.pjm.diving.service.domain.dto;
 
 import javax.persistence.EnumType;
 import javax.persistence.Enumerated;
+import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Pattern;
 import javax.validation.constraints.Size;
 
@@ -39,6 +40,7 @@ public class UserDto {
     private String nickname;
 
     @Enumerated(EnumType.ORDINAL)
+    @NotNull(message = "{message.user.gender.notEmpty}")
     private GenderEnum gender;
 
     @NotEmpty(message = "{message.user.country.notEmpty}")
@@ -61,6 +63,7 @@ public class UserDto {
     private String nickname;
 
     @Enumerated(EnumType.ORDINAL)
+    @NotNull(message = "{message.user.gender.notEmpty}")
     private GenderEnum gender;
 
     @NotEmpty(message = "{message.user.country.notEmpty}")

@@ -4,6 +4,7 @@ import java.util.Date;
 
 import javax.persistence.EnumType;
 import javax.persistence.Enumerated;
+import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Past;
 
 import org.hibernate.validator.constraints.NotEmpty;
@@ -15,6 +16,7 @@ import kr.co.pjm.diving.common.domain.enumeration.DivePlanToolEnum;
 import kr.co.pjm.diving.common.domain.enumeration.DiveTypeEnum;
 import kr.co.pjm.diving.common.domain.enumeration.DiveWaterEnum;
 import kr.co.pjm.diving.common.domain.enumeration.DiveWaveEnum;
+import kr.co.pjm.diving.service.common.domain.dto.CommonDto;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -24,7 +26,7 @@ import lombok.Setter;
 @Setter
 @NoArgsConstructor
 @AllArgsConstructor
-public class DiveLogDto {
+public class DiveLogDto extends CommonDto {
   
   /* 번호 */
   @NotEmpty(message = "{message.diveLog.diveNo.notEmpty}")
@@ -90,7 +92,7 @@ public class DiveLogDto {
   private String diveSafetyTime;
   
   /* 다이빙 계획 도구 */
-  //@NotEmpty(message = "{message.diveLog.divePlanTool.notEmpty}")
+  @NotNull(message = "{message.diveLog.divePlanTool.notEmpty}")
   @Enumerated(EnumType.STRING)
   private DivePlanToolEnum divePlanTool;
   
@@ -102,7 +104,7 @@ public class DiveLogDto {
   
   /* 노출 보호 */
   @Enumerated(EnumType.STRING)
-  //@NotEmpty(message = "{message.diveLog.divePlanExrPtn.notEmpty}")
+  @NotNull(message = "{message.diveLog.divePlanExrPtn.notEmpty}")
   private DivePlanExrPtnEnum divePlanExrPtn;
   
   /* 다이브 후드 여부 */

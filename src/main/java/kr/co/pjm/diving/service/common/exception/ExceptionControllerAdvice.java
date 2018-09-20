@@ -64,6 +64,7 @@ public class ExceptionControllerAdvice {
   
   @ExceptionHandler(value = Exception.class)
   public ResponseEntity<ErrorDto> handlerException(HttpServletRequest req,Exception e) {
+    e.printStackTrace();
 
     ErrorDto errorDto = new ErrorDto(e.getMessage(), HttpStatus.INTERNAL_SERVER_ERROR.value(), req.getRequestURI(), new Date());
 

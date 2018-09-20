@@ -103,7 +103,7 @@ public class UserServiceImpl implements UserService {
       throw new ResourceNotFoundException(msa.getMessage("message.common.resource.not.found", new String[]{ String.valueOf(id) }));
     }
     
-    return userRepository.findOne(id);
+    return user;
   }
 
   @Override
