@@ -25,16 +25,10 @@ public class SearchDto {
   private String orderby;
   
   private String sorts;
-  private List<Sort> sortList = new ArrayList<Sort>();
 
   public SearchDto() {
     if (StringUtils.isEmpty(this.orderby)) this.orderby = "reg_date";
     if (StringUtils.isEmpty(this.sort)) this.sort = "DESC";
-  }
-  
-  @Override
-  public String toString() {
-    return ToStringBuilder.reflectionToString(this, ToStringStyle.JSON_STYLE);
   }
   
   @Getter @Setter
@@ -43,9 +37,8 @@ public class SearchDto {
     private String searchText;
   }
   
-  @Getter @Setter
-  public static class Sort {
-    private String sortType;
-    private String sortColumn;
+  @Override
+  public String toString() {
+    return ToStringBuilder.reflectionToString(this, ToStringStyle.JSON_STYLE);
   }
 }

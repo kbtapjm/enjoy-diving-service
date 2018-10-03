@@ -3,8 +3,12 @@ package kr.co.pjm.diving.service.service.impl;
 import java.util.Date;
 import java.util.List;
 
+import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.support.MessageSourceAccessor;
+import org.springframework.data.domain.Sort;
+import org.springframework.data.domain.Sort.Direction;
+import org.springframework.data.domain.Sort.Order;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -90,6 +94,30 @@ public class DiveLogServiceImpl implements DiveLogService {
   @Override
   public ResourcesDto getDiveLogs(SearchDto searchDto, PagingDto pagingDto) {
     List<DiveLog> list = diveLogRepository.findAll();
+    
+    /* search */
+    
+    /* Sort */
+    if (!StringUtils.isEmpty(searchDto.getSorts())) {
+      String[] sortsArr = searchDto.getSorts().split(",");
+      
+      int idx = 0;
+      Order[] order = new Order[sortsArr.length];
+      for (String s : sortsArr) {
+        if (s == null) continue;
+        
+        String sortType = s.substring(0, 1);
+        String sortColumn = s.substring(1, s.length());
+        
+        order[idx] = new Order(sortType.equals("+") ? Direction.ASC : Direction.DESC, sortColumn);
+        
+        idx++;
+      }
+      
+      Sort sort = new Sort(order);  
+    }
+    
+    /* page */
     
     return new ResourcesDto(list);
   }
