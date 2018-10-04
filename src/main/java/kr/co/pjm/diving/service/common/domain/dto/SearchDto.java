@@ -37,6 +37,12 @@ public class SearchDto {
     private String searchText;
   }
   
+  @Getter @Setter
+  public static class OrderBySort {
+    private String sortType;
+    private String sortColumn;
+  }
+  
   @Override
   public String toString() {
     return ToStringBuilder.reflectionToString(this, ToStringStyle.JSON_STYLE);

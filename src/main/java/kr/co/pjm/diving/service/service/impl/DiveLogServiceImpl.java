@@ -1,22 +1,25 @@
 package kr.co.pjm.diving.service.service.impl;
 
 import java.util.Date;
-import java.util.List;
 
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.support.MessageSourceAccessor;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Sort;
 import org.springframework.data.domain.Sort.Direction;
 import org.springframework.data.domain.Sort.Order;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import kr.co.pjm.diving.common.domain.dto.ResourcesDto;
+import com.querydsl.core.types.Predicate;
+
 import kr.co.pjm.diving.common.domain.entity.DiveLog;
 import kr.co.pjm.diving.common.exception.ResourceNotFoundException;
 import kr.co.pjm.diving.common.repository.DiveLogRepository;
 import kr.co.pjm.diving.service.common.domain.dto.PagingDto;
+import kr.co.pjm.diving.service.common.domain.dto.ResourcesDto;
 import kr.co.pjm.diving.service.common.domain.dto.SearchDto;
 import kr.co.pjm.diving.service.domain.dto.DiveLogDto;
 import kr.co.pjm.diving.service.service.DiveLogService;
@@ -93,16 +96,17 @@ public class DiveLogServiceImpl implements DiveLogService {
 
   @Override
   public ResourcesDto getDiveLogs(SearchDto searchDto, PagingDto pagingDto) {
-    List<DiveLog> list = diveLogRepository.findAll();
+    Predicate predicate = null;
     
     /* search */
     
     /* Sort */
+    Order[] order = null;
     if (!StringUtils.isEmpty(searchDto.getSorts())) {
       String[] sortsArr = searchDto.getSorts().split(",");
       
       int idx = 0;
-      Order[] order = new Order[sortsArr.length];
+      order = new Order[sortsArr.length];
       for (String s : sortsArr) {
         if (s == null) continue;
         
@@ -113,13 +117,24 @@ public class DiveLogServiceImpl implements DiveLogService {
         
         idx++;
       }
-      
-      Sort sort = new Sort(order);  
     }
     
     /* page */
+    Sort sort = new Sort(order);
+    PageRequest pageRequest = new PageRequest(pagingDto.getOffset(), pagingDto.getLimit(), sort);
     
-    return new ResourcesDto(list);
+    Page<DiveLog> page = diveLogRepository.findAll(predicate, pageRequest);
+    log.info("getNumber : {}", page.getNumber());
+    log.info("getNumberOfElements : {}", page.getNumberOfElements());
+    log.info("getSize : {}", page.getSize());
+    log.info("getSort : {}", page.getSort());
+    log.info("getTotalElements : {}", page.getTotalElements());
+    log.info("getTotalPages : {}", page.getTotalPages());
+    
+    ResourcesDto resourcesDto = new ResourcesDto(page.getContent(), searchDto, pagingDto);
+    resourcesDto.putContent("total", diveLogRepository.count(predicate));
+    
+    return resourcesDto;
   }
 
   @Transactional
