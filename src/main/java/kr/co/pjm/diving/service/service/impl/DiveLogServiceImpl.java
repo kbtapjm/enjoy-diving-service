@@ -1,6 +1,8 @@
 package kr.co.pjm.diving.service.service.impl;
 
+import java.util.ArrayList;
 import java.util.Date;
+import java.util.List;
 
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -21,6 +23,7 @@ import kr.co.pjm.diving.common.repository.DiveLogRepository;
 import kr.co.pjm.diving.service.common.domain.dto.PagingDto;
 import kr.co.pjm.diving.service.common.domain.dto.ResourcesDto;
 import kr.co.pjm.diving.service.common.domain.dto.SearchDto;
+import kr.co.pjm.diving.service.common.domain.dto.SearchDto.OrderBySort;
 import kr.co.pjm.diving.service.domain.dto.DiveLogDto;
 import kr.co.pjm.diving.service.service.DiveLogService;
 import lombok.extern.slf4j.Slf4j;
@@ -105,6 +108,8 @@ public class DiveLogServiceImpl implements DiveLogService {
     if (!StringUtils.isEmpty(searchDto.getSorts())) {
       String[] sortsArr = searchDto.getSorts().split(",");
       
+      List<OrderBySort> sortList = new ArrayList<OrderBySort>();
+      
       int idx = 0;
       order = new Order[sortsArr.length];
       for (String s : sortsArr) {
@@ -113,10 +118,13 @@ public class DiveLogServiceImpl implements DiveLogService {
         String sortType = s.substring(0, 1);
         String sortColumn = s.substring(1, s.length());
         
-        order[idx] = new Order(sortType.equals("+") ? Direction.ASC : Direction.DESC, sortColumn);
+        order[idx++] = new Order(sortType.equals("+") ? Direction.ASC : Direction.DESC, sortColumn);
         
-        idx++;
+        OrderBySort orderBySort = OrderBySort.builder().sortColumn(sortColumn).sortType(sortType.equals("+") ? Direction.ASC.name() : Direction.DESC.name()).build();
+        sortList.add(orderBySort);
       }
+      
+      searchDto.setSortList(sortList);
     }
     
     /* page */
@@ -124,12 +132,15 @@ public class DiveLogServiceImpl implements DiveLogService {
     PageRequest pageRequest = new PageRequest(pagingDto.getOffset(), pagingDto.getLimit(), sort);
     
     Page<DiveLog> page = diveLogRepository.findAll(predicate, pageRequest);
-    log.info("getNumber : {}", page.getNumber());
-    log.info("getNumberOfElements : {}", page.getNumberOfElements());
-    log.info("getSize : {}", page.getSize());
-    log.info("getSort : {}", page.getSort());
-    log.info("getTotalElements : {}", page.getTotalElements());
-    log.info("getTotalPages : {}", page.getTotalPages());
+    
+    if (log.isInfoEnabled()) {
+      log.info("getNumber : {}", page.getNumber());
+      log.info("getNumberOfElements : {}", page.getNumberOfElements());
+      log.info("getSize : {}", page.getSize());
+      log.info("getSort : {}", page.getSort());
+      log.info("getTotalElements : {}", page.getTotalElements());
+      log.info("getTotalPages : {}", page.getTotalPages());  
+    }
     
     ResourcesDto resourcesDto = new ResourcesDto(page.getContent(), searchDto, pagingDto);
     resourcesDto.putContent("total", diveLogRepository.count(predicate));
