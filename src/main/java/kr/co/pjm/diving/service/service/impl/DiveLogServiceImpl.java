@@ -3,6 +3,7 @@ package kr.co.pjm.diving.service.service.impl;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
+import java.util.StringTokenizer;
 
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -18,6 +19,7 @@ import org.springframework.transaction.annotation.Transactional;
 import com.querydsl.core.types.Predicate;
 
 import kr.co.pjm.diving.common.domain.entity.DiveLog;
+import kr.co.pjm.diving.common.domain.entity.QDiveLog;
 import kr.co.pjm.diving.common.exception.ResourceNotFoundException;
 import kr.co.pjm.diving.common.repository.DiveLogRepository;
 import kr.co.pjm.diving.service.common.domain.dto.PagingDto;
@@ -103,12 +105,36 @@ public class DiveLogServiceImpl implements DiveLogService {
     
     /* search */
     
+    if (!StringUtils.isEmpty(searchDto.getQ())) {
+      QDiveLog qDiveLog = QDiveLog.diveLog;
+      
+      String[] qs = searchDto.getQ().split(",");
+      
+      for (String q : qs) {
+        StringTokenizer st = new StringTokenizer(q, "=");
+        
+        while (st.hasMoreTokens()) {
+          log.info("{}={}", st.nextToken(), st.nextToken());
+          
+          switch (st.nextToken()) {
+          case "diveDate":
+            
+            break;
+          case "divePlace":
+            break;
+          case "diveType":
+            break;
+          }
+        }
+      }
+    }
+    
     /* Sort */
     Order[] order = null;
     if (!StringUtils.isEmpty(searchDto.getSorts())) {
       String[] sortsArr = searchDto.getSorts().split(",");
       
-      List<OrderBySort> sortList = new ArrayList<OrderBySort>();
+      List<OrderBySort> orderBySorts = new ArrayList<OrderBySort>();
       
       int idx = 0;
       order = new Order[sortsArr.length];
@@ -120,12 +146,12 @@ public class DiveLogServiceImpl implements DiveLogService {
         
         order[idx++] = new Order(sortType.equals("+") ? Direction.ASC : Direction.DESC, sortColumn);
         
-        OrderBySort orderBySort = OrderBySort.builder().sortColumn(sortColumn).sortType(sortType.equals("+") ? Direction.ASC.name() : Direction.DESC.name()).build();
-        sortList.add(orderBySort);
+        OrderBySort orderBySort = OrderBySort.builder().sort(sortColumn).orderBy(sortType.equals("+") ? Direction.ASC.name() : Direction.DESC.name()).build();
+        orderBySorts.add(orderBySort);
       }
       
-      searchDto.setSortList(sortList);
-    }
+      searchDto.setOrderBySorts(orderBySorts);
+    } 
     
     /* page */
     Sort sort = new Sort(order);

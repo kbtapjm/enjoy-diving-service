@@ -23,17 +23,17 @@ public class SearchDto {
   private String q;
   private List<SearchQ> qList = new ArrayList<SearchQ>();
   private String sorts;
-  private List<OrderBySort> sortList = new ArrayList<OrderBySort>();
+  private List<OrderBySort> orderBySorts = new ArrayList<OrderBySort>();
   
-  private String sort;
-  private String orderby;
+  private String defaultSort;
+  private String defaultOrderby;
 
   public SearchDto() {
-    if (StringUtils.isEmpty(this.orderby)) {
-      this.orderby = "reg_date";
+    if (StringUtils.isEmpty(this.defaultOrderby)) {
+      this.defaultOrderby = "reg_date";
     }
-    if (StringUtils.isEmpty(this.sort)) {
-      this.sort = "DESC";
+    if (StringUtils.isEmpty(this.defaultSort)) {
+      this.defaultSort = "DESC";
     }
   }
 
@@ -48,8 +48,8 @@ public class SearchDto {
   @Setter
   @Builder
   public static class OrderBySort {
-    private String sortType;
-    private String sortColumn;
+    private String sort;
+    private String orderBy;
   }
 
   @Override
