@@ -20,7 +20,6 @@ import org.springframework.web.util.UriComponents;
 import org.springframework.web.util.UriComponentsBuilder;
 
 import kr.co.pjm.diving.common.domain.entity.DiveLog;
-import kr.co.pjm.diving.common.domain.entity.User;
 import kr.co.pjm.diving.service.common.domain.dto.PagingDto;
 import kr.co.pjm.diving.service.common.domain.dto.SearchDto;
 import kr.co.pjm.diving.service.domain.dto.DiveLogDto;
@@ -36,6 +35,11 @@ public class DiveLogController {
 
   @Autowired
   private DiveLogService diveLogService;
+  
+  @GetMapping(produces = MediaType.APPLICATION_JSON_VALUE)
+  public ResponseEntity<?> getDiveLogs(@ModelAttribute SearchDto searchDto, @ModelAttribute PagingDto pagingDto) {
+    return ResponseEntity.ok(diveLogService.getDiveLogs(searchDto, pagingDto));
+  }
 
   @PostMapping(consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
   public ResponseEntity<?> create(@Valid @RequestBody DiveLogDto diveLogDto, UriComponentsBuilder b,
@@ -47,11 +51,6 @@ public class DiveLogController {
     return ResponseEntity.created(uriComponents.toUri()).build();
   }
   
-  @GetMapping(produces = MediaType.APPLICATION_JSON_VALUE)
-  public ResponseEntity<?> getDiveLogs(@ModelAttribute SearchDto searchDto, @ModelAttribute PagingDto pagingDto) {
-    return ResponseEntity.ok(diveLogService.getDiveLogs(searchDto, pagingDto));
-  }
-
   @GetMapping(value = "/{id}", produces = MediaType.APPLICATION_JSON_VALUE)
   public ResponseEntity<?> getDiveLog(@PathVariable("id") Long id)
       throws Exception {
@@ -76,7 +75,7 @@ public class DiveLogController {
     
     diveLogService.delete(id);
 
-    return new ResponseEntity<User>(HttpStatus.NO_CONTENT);
+    return new ResponseEntity<DiveLog>(HttpStatus.NO_CONTENT);
   }
 
 }

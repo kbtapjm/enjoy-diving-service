@@ -16,6 +16,7 @@ import org.springframework.data.domain.Sort.Order;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import com.querydsl.core.BooleanBuilder;
 import com.querydsl.core.types.Predicate;
 
 import kr.co.pjm.diving.common.domain.entity.DiveLog;
@@ -104,23 +105,25 @@ public class DiveLogServiceImpl implements DiveLogService {
     Predicate predicate = null;
     
     /* search */
-    
+    QDiveLog qDiveLog = QDiveLog.diveLog;
+    BooleanBuilder booleanBuilder = new BooleanBuilder();
     if (!StringUtils.isEmpty(searchDto.getQ())) {
-      QDiveLog qDiveLog = QDiveLog.diveLog;
-      
       String[] qs = searchDto.getQ().split(",");
       
       for (String q : qs) {
         StringTokenizer st = new StringTokenizer(q, "=");
         
         while (st.hasMoreTokens()) {
-          log.info("{}={}", st.nextToken(), st.nextToken());
+          String searchColumn = st.nextToken();
+          String searchValue = st.nextToken();
           
-          switch (st.nextToken()) {
+          log.info("{}={}", searchColumn, searchValue);
+          
+          switch (searchColumn) {
           case "diveDate":
-            
             break;
           case "divePlace":
+            booleanBuilder.and(qDiveLog.divePlace.like("%".concat(searchValue).concat("%")));
             break;
           case "diveType":
             break;
@@ -157,7 +160,7 @@ public class DiveLogServiceImpl implements DiveLogService {
     Sort sort = new Sort(order);
     PageRequest pageRequest = new PageRequest(pagingDto.getOffset(), pagingDto.getLimit(), sort);
     
-    Page<DiveLog> page = diveLogRepository.findAll(predicate, pageRequest);
+    Page<DiveLog> page = diveLogRepository.findAll(booleanBuilder, pageRequest);
     
     if (log.isInfoEnabled()) {
       log.info("getNumber : {}", page.getNumber());
@@ -169,7 +172,7 @@ public class DiveLogServiceImpl implements DiveLogService {
     }
     
     ResourcesDto resourcesDto = new ResourcesDto(page.getContent(), searchDto, pagingDto);
-    resourcesDto.putContent("total", diveLogRepository.count(predicate));
+    resourcesDto.putContent("total", diveLogRepository.count(booleanBuilder));
     
     return resourcesDto;
   }
