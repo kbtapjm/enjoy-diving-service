@@ -56,10 +56,15 @@ public class SearchDto {
     if (!StringUtils.isEmpty(this.sorts)) {
       String[] sortsArr = this.sorts.split(",");
       
+      String sort = StringUtils.EMPTY;
+      Direction orderBy = null;
       for (String s : sortsArr) {
-        if (s == null) continue;
+        if (StringUtils.isEmpty(s)) continue;
         
-        OrderBySort orderBySort = OrderBySort.builder().orderBy(s.substring(0, 1).equals("+") ? Direction.ASC : Direction.DESC).sort(s.substring(1, s.length())).build();
+        sort = s.substring(1, s.length());
+        orderBy = s.substring(0, 1).equals("+") ? Direction.ASC : Direction.DESC;
+        
+        OrderBySort orderBySort = OrderBySort.builder().orderBy(orderBy).sort(sort).build();
         
         this.orderBySorts.add(orderBySort);
       }

@@ -3,17 +3,25 @@ package kr.co.pjm.diving.service.service.impl;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.support.MessageSourceAccessor;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import com.querydsl.core.BooleanBuilder;
+import com.querydsl.core.types.Predicate;
+
 import kr.co.pjm.diving.common.domain.dto.UserBasicDto;
 import kr.co.pjm.diving.common.domain.dto.UserDiveDto;
+import kr.co.pjm.diving.common.domain.entity.QDiveLog;
+import kr.co.pjm.diving.common.domain.entity.QUser;
 import kr.co.pjm.diving.common.domain.entity.Role;
 import kr.co.pjm.diving.common.domain.entity.User;
 import kr.co.pjm.diving.common.domain.entity.UserBasic;
 import kr.co.pjm.diving.common.domain.entity.UserDive;
 import kr.co.pjm.diving.common.domain.entity.UserRole;
+import kr.co.pjm.diving.common.domain.enumeration.DiveTypeEnum;
 import kr.co.pjm.diving.common.domain.enumeration.RoleTypeEnum;
 import kr.co.pjm.diving.common.domain.enumeration.UserStatusEnum;
 import kr.co.pjm.diving.common.exception.ResourceNotFoundException;
@@ -22,6 +30,11 @@ import kr.co.pjm.diving.common.repository.UserBasicRepository;
 import kr.co.pjm.diving.common.repository.UserConnectionRepasitory;
 import kr.co.pjm.diving.common.repository.UserDiveRepository;
 import kr.co.pjm.diving.common.repository.UserRepository;
+import kr.co.pjm.diving.common.util.DateUtil;
+import kr.co.pjm.diving.service.common.domain.dto.PagingDto;
+import kr.co.pjm.diving.service.common.domain.dto.ResourcesDto;
+import kr.co.pjm.diving.service.common.domain.dto.SearchDto;
+import kr.co.pjm.diving.service.common.domain.dto.SearchDto.SearchQ;
 import kr.co.pjm.diving.service.domain.dto.UserDto;
 import kr.co.pjm.diving.service.service.UserService;
 import lombok.extern.slf4j.Slf4j;
@@ -50,6 +63,35 @@ public class UserServiceImpl implements UserService {
   
   @Autowired 
   MessageSourceAccessor msa;
+  
+  @Override
+  public ResourcesDto getUsers(SearchDto searchDto, PagingDto pagingDto) {
+    /* search */
+    Predicate predicate = this.getPredicate(searchDto);
+       
+    /* page */
+    PageRequest pageRequest = new PageRequest(pagingDto.getOffset(), pagingDto.getLimit(), searchDto.getPageSort());
+    
+    Page<User> page = userRepository.findAll(predicate, pageRequest);
+    
+    ResourcesDto resourcesDto = new ResourcesDto(page.getContent(), searchDto, pagingDto);
+    resourcesDto.putContent("total", userRepository.count(predicate));
+    
+    return resourcesDto;
+  }
+  
+  public Predicate getPredicate(SearchDto searchDto) {
+    BooleanBuilder booleanBuilder = new BooleanBuilder();
+    QUser qUser = QUser.user;
+    for (SearchQ searchQ : searchDto.getQList()) {
+      switch (searchQ.getSearchColumn()) {
+      case "name":
+        break;
+      }
+    }
+    
+    return booleanBuilder;
+  }
 
   @Override
   @Transactional
@@ -109,7 +151,9 @@ public class UserServiceImpl implements UserService {
   @Override
   public User getByEmail(String email) {
     User user = userRepository.findByEmail(email); 
-    log.debug("user : {}", user.getEmail());
+    if (user == null) {
+      throw new ResourceNotFoundException(msa.getMessage("message.common.resource.not.found", new String[]{ email }));
+    }
     
     return user;
   }
@@ -145,6 +189,9 @@ public class UserServiceImpl implements UserService {
   @Transactional
   public void delete(Long id) {
     User user = userRepository.findOne(id);
+    if (user == null) {
+      throw new ResourceNotFoundException(msa.getMessage("message.common.resource.not.found", new String[]{ String.valueOf(id) }));
+    }
     
     userBasicRepository.delete(id);
     userDiveRepository.delete(id);

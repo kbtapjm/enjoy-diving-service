@@ -14,12 +14,15 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.util.UriComponents;
 import org.springframework.web.util.UriComponentsBuilder;
 
 import io.swagger.annotations.ApiOperation;
 import kr.co.pjm.diving.common.domain.entity.User;
+import kr.co.pjm.diving.service.common.domain.dto.PagingDto;
+import kr.co.pjm.diving.service.common.domain.dto.SearchDto;
 import kr.co.pjm.diving.service.domain.dto.UserDto;
 import kr.co.pjm.diving.service.service.UserService;
 import lombok.extern.slf4j.Slf4j;
@@ -33,9 +36,22 @@ public class UserController {
 
   @Autowired
   private UserService userService;
+  
+  @GetMapping(produces = MediaType.APPLICATION_JSON_VALUE)
+  public ResponseEntity<?> getUsers(
+      @RequestParam(value = "sorts", required = false, defaultValue = "") String sorts, 
+      @RequestParam(value = "q", required = false, defaultValue = "") String q,
+      @RequestParam(value = "offset", required = false, defaultValue = "0") int offset,
+      @RequestParam(value = "limit", required = false, defaultValue = "10") int limit) {
+    
+    SearchDto searchDto = SearchDto.builder().q(q).sorts(sorts).build();
+    PagingDto pagingDto = PagingDto.builder().offset(offset).limit(limit).build();
+    
+    return ResponseEntity.ok(userService.getUsers(searchDto, pagingDto));
+  }
 
   @PostMapping(consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
-  public ResponseEntity<?> create(@Valid @RequestBody UserDto.Create userCreate, UriComponentsBuilder b, HttpServletRequest request)
+  public ResponseEntity<?> createUser(@Valid @RequestBody UserDto.Create userCreate, UriComponentsBuilder b, HttpServletRequest request)
       throws Exception {
     User user = userService.set(userCreate);
 

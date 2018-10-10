@@ -35,6 +35,51 @@ public class DiveLogServiceImpl implements DiveLogService {
   
   @Autowired 
   MessageSourceAccessor msa;
+  
+  @Override
+  public ResourcesDto getDiveLogs(SearchDto searchDto, PagingDto pagingDto) {
+    /* search */
+    Predicate predicate = this.getPredicate(searchDto);
+       
+    /* page */
+    PageRequest pageRequest = new PageRequest(pagingDto.getOffset(), pagingDto.getLimit(), searchDto.getPageSort());
+    
+    Page<DiveLog> page = diveLogRepository.findAll(predicate, pageRequest);
+    
+    if (log.isInfoEnabled()) {
+      log.info("getNumber : {}", page.getNumber());
+      log.info("getNumberOfElements : {}", page.getNumberOfElements());
+      log.info("getSize : {}", page.getSize());
+      log.info("getSort : {}", page.getSort());
+      log.info("getTotalElements : {}", page.getTotalElements());
+      log.info("getTotalPages : {}", page.getTotalPages());  
+    }
+    
+    ResourcesDto resourcesDto = new ResourcesDto(page.getContent(), searchDto, pagingDto);
+    resourcesDto.putContent("total", diveLogRepository.count(predicate));
+    
+    return resourcesDto;
+  }
+  
+  public Predicate getPredicate(SearchDto searchDto) {
+    BooleanBuilder booleanBuilder = new BooleanBuilder();
+    QDiveLog qDiveLog = QDiveLog.diveLog;
+    for (SearchQ searchQ : searchDto.getQList()) {
+      switch (searchQ.getSearchColumn()) {
+      case "diveDate":
+        booleanBuilder.and(qDiveLog.diveDate.eq(DateUtil.getInstance().toDate(searchQ.getSearchValue(), DateUtil.FORMAT_YYYY_MM_DD)));
+        break;
+      case "divePlace":
+        booleanBuilder.and(qDiveLog.divePlace.like("%".concat(searchQ.getSearchValue()).concat("%")));
+        break;
+      case "diveType":
+        booleanBuilder.and(qDiveLog.diveType.eq(DiveTypeEnum.findByValue(searchQ.getSearchValue())));
+        break;
+      }
+    }
+    
+    return booleanBuilder;
+  }
 
   @Transactional
   @Override
@@ -90,31 +135,6 @@ public class DiveLogServiceImpl implements DiveLogService {
     
     return diveLogRepository.findOne(id);
   }
-
-  @Override
-  public ResourcesDto getDiveLogs(SearchDto searchDto, PagingDto pagingDto) {
-    /* search */
-    Predicate predicate = this.getPredicate(searchDto);
-       
-    /* page */
-    PageRequest pageRequest = new PageRequest(pagingDto.getOffset(), pagingDto.getLimit(), searchDto.getPageSort());
-    
-    Page<DiveLog> page = diveLogRepository.findAll(predicate, pageRequest);
-    
-    if (log.isInfoEnabled()) {
-      log.info("getNumber : {}", page.getNumber());
-      log.info("getNumberOfElements : {}", page.getNumberOfElements());
-      log.info("getSize : {}", page.getSize());
-      log.info("getSort : {}", page.getSort());
-      log.info("getTotalElements : {}", page.getTotalElements());
-      log.info("getTotalPages : {}", page.getTotalPages());  
-    }
-    
-    ResourcesDto resourcesDto = new ResourcesDto(page.getContent(), searchDto, pagingDto);
-    resourcesDto.putContent("total", diveLogRepository.count(predicate));
-    
-    return resourcesDto;
-  }
   
   @Transactional
   @Override
@@ -166,26 +186,6 @@ public class DiveLogServiceImpl implements DiveLogService {
   @Override
   public void delete(Long id) {
     diveLogRepository.delete(id);
-  }
-  
-  public Predicate getPredicate(SearchDto searchDto) {
-    BooleanBuilder booleanBuilder = new BooleanBuilder();
-    QDiveLog qDiveLog = QDiveLog.diveLog;
-    for (SearchQ searchQ : searchDto.getQList()) {
-      switch (searchQ.getSearchColumn()) {
-      case "diveDate":
-        booleanBuilder.and(qDiveLog.diveDate.eq(DateUtil.getInstance().toDate(searchQ.getSearchValue(), DateUtil.FORMAT_YYYY_MM_DD)));
-        break;
-      case "divePlace":
-        booleanBuilder.and(qDiveLog.divePlace.like("%".concat(searchQ.getSearchValue()).concat("%")));
-        break;
-      case "diveType":
-        booleanBuilder.and(qDiveLog.diveType.eq(DiveTypeEnum.findByValue(searchQ.getSearchValue())));
-        break;
-      }
-    }
-    
-    return booleanBuilder;
   }
 
 }

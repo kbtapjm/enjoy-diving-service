@@ -9,6 +9,8 @@ import javax.validation.constraints.Size;
 import org.hibernate.validator.constraints.Email;
 import org.hibernate.validator.constraints.NotEmpty;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+
 import kr.co.pjm.diving.common.domain.enumeration.GenderEnum;
 import kr.co.pjm.diving.common.domain.enumeration.UserStatusEnum;
 import lombok.AllArgsConstructor;
@@ -46,6 +48,7 @@ public class UserDto {
     @NotEmpty(message = "{message.user.country.notEmpty}")
     private String country;
 
+    @JsonIgnore
     @Enumerated(EnumType.ORDINAL)
     private UserStatusEnum status;
   }

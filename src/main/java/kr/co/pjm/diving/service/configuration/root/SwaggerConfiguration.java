@@ -17,8 +17,7 @@ public class SwaggerConfiguration {
     return new Docket(DocumentationType.SWAGGER_2)
         .select()
         .apis(RequestHandlerSelectors.basePackage("kr.co.pjm.diving.service.controller"))
-        .apis(RequestHandlerSelectors.any())
-        .build();
+        .apis(RequestHandlerSelectors.any()).build();
   }
 
 }
