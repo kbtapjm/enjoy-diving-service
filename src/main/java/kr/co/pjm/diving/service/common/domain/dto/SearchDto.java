@@ -1,12 +1,17 @@
 package kr.co.pjm.diving.service.common.domain.dto;
 
-import java.util.ArrayList;
-import java.util.List;
+import java.util.HashSet;
+import java.util.Set;
+import java.util.StringTokenizer;
 
 import org.apache.commons.lang3.StringUtils;
 import org.apache.commons.lang3.builder.ToStringBuilder;
 import org.apache.commons.lang3.builder.ToStringStyle;
+import org.springframework.data.domain.Sort;
+import org.springframework.data.domain.Sort.Direction;
+import org.springframework.data.domain.Sort.Order;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonInclude.Include;
@@ -21,27 +26,69 @@ import lombok.Setter;
 @JsonInclude(Include.NON_EMPTY)
 public class SearchDto {
   private String q;
-  private List<SearchQ> qList = new ArrayList<SearchQ>();
+  private Set<SearchQ> qList = new HashSet<SearchQ>();
   private String sorts;
-  private List<OrderBySort> orderBySorts = new ArrayList<OrderBySort>();
+  private Set<OrderBySort> orderBySorts = new HashSet<OrderBySort>();
   
-  private String defaultSort;
-  private String defaultOrderby;
-
-  public SearchDto() {
-    if (StringUtils.isEmpty(this.defaultOrderby)) {
-      this.defaultOrderby = "reg_date";
+  @Builder
+  public SearchDto(String q, String sorts) {
+    this.q = q;
+    this.sorts = sorts;
+    
+    if (!StringUtils.isEmpty(this.q)) {
+      String[] qArr = this.q.split(",");
+      
+      for (String str : qArr) {
+        StringTokenizer st = new StringTokenizer(str, "=");
+        
+        String searchColumn = StringUtils.EMPTY;
+        String searchValue = StringUtils.EMPTY;
+        while (st.hasMoreTokens()) {
+          searchColumn = st.nextToken();
+          searchValue = st.nextToken();
+        }
+        SearchQ searchQ = SearchQ.builder().searchColumn(searchColumn).searchValue(searchValue).build();
+        
+        qList.add(searchQ);
+      }
     }
-    if (StringUtils.isEmpty(this.defaultSort)) {
-      this.defaultSort = "DESC";
+    
+    if (!StringUtils.isEmpty(this.sorts)) {
+      String[] sortsArr = this.sorts.split(",");
+      
+      for (String s : sortsArr) {
+        if (s == null) continue;
+        
+        OrderBySort orderBySort = OrderBySort.builder().orderBy(s.substring(0, 1).equals("+") ? Direction.ASC : Direction.DESC).sort(s.substring(1, s.length())).build();
+        
+        this.orderBySorts.add(orderBySort);
+      }
     }
   }
-
+  
+  @JsonIgnore
+  public Sort getPageSort() {
+    Sort sort = null;
+    if (!this.getOrderBySorts().isEmpty()) {
+      Order[] order = new Order[this.getOrderBySorts().size()];
+      
+      int idx = 0;
+      for (OrderBySort orderBySort : this.getOrderBySorts()) {
+        order[idx++] = new Order(orderBySort.getOrderBy(), orderBySort.getSort());
+      }
+      
+      sort = new Sort(order);
+    }
+    
+    return sort;
+  }
+  
   @Getter
   @Setter
+  @Builder
   public static class SearchQ {
     private String searchColumn;
-    private String searchText;
+    private String searchValue;
   }
 
   @Getter
@@ -49,7 +96,7 @@ public class SearchDto {
   @Builder
   public static class OrderBySort {
     private String sort;
-    private String orderBy;
+    private Direction orderBy;
   }
 
   @Override

@@ -1,18 +1,11 @@
 package kr.co.pjm.diving.service.service.impl;
 
-import java.util.ArrayList;
 import java.util.Date;
-import java.util.List;
-import java.util.StringTokenizer;
 
-import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.support.MessageSourceAccessor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
-import org.springframework.data.domain.Sort;
-import org.springframework.data.domain.Sort.Direction;
-import org.springframework.data.domain.Sort.Order;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -21,12 +14,14 @@ import com.querydsl.core.types.Predicate;
 
 import kr.co.pjm.diving.common.domain.entity.DiveLog;
 import kr.co.pjm.diving.common.domain.entity.QDiveLog;
+import kr.co.pjm.diving.common.domain.enumeration.DiveTypeEnum;
 import kr.co.pjm.diving.common.exception.ResourceNotFoundException;
 import kr.co.pjm.diving.common.repository.DiveLogRepository;
+import kr.co.pjm.diving.common.util.DateUtil;
 import kr.co.pjm.diving.service.common.domain.dto.PagingDto;
 import kr.co.pjm.diving.service.common.domain.dto.ResourcesDto;
 import kr.co.pjm.diving.service.common.domain.dto.SearchDto;
-import kr.co.pjm.diving.service.common.domain.dto.SearchDto.OrderBySort;
+import kr.co.pjm.diving.service.common.domain.dto.SearchDto.SearchQ;
 import kr.co.pjm.diving.service.domain.dto.DiveLogDto;
 import kr.co.pjm.diving.service.service.DiveLogService;
 import lombok.extern.slf4j.Slf4j;
@@ -88,10 +83,6 @@ public class DiveLogServiceImpl implements DiveLogService {
 
   @Override
   public DiveLog getById(Long id) {
-    if (log.isInfoEnabled()) {
-      log.info("id : {}", id);
-    }
-    
     DiveLog diveLog = diveLogRepository.findOne(id);
     if (diveLog == null) {
       throw new ResourceNotFoundException(msa.getMessage("message.common.resource.not.found", new String[]{ String.valueOf(id) }));
@@ -102,65 +93,13 @@ public class DiveLogServiceImpl implements DiveLogService {
 
   @Override
   public ResourcesDto getDiveLogs(SearchDto searchDto, PagingDto pagingDto) {
-    Predicate predicate = null;
-    
     /* search */
-    QDiveLog qDiveLog = QDiveLog.diveLog;
-    BooleanBuilder booleanBuilder = new BooleanBuilder();
-    if (!StringUtils.isEmpty(searchDto.getQ())) {
-      String[] qs = searchDto.getQ().split(",");
-      
-      for (String q : qs) {
-        StringTokenizer st = new StringTokenizer(q, "=");
-        
-        while (st.hasMoreTokens()) {
-          String searchColumn = st.nextToken();
-          String searchValue = st.nextToken();
-          
-          log.info("{}={}", searchColumn, searchValue);
-          
-          switch (searchColumn) {
-          case "diveDate":
-            break;
-          case "divePlace":
-            booleanBuilder.and(qDiveLog.divePlace.like("%".concat(searchValue).concat("%")));
-            break;
-          case "diveType":
-            break;
-          }
-        }
-      }
-    }
-    
-    /* Sort */
-    Order[] order = null;
-    if (!StringUtils.isEmpty(searchDto.getSorts())) {
-      String[] sortsArr = searchDto.getSorts().split(",");
-      
-      List<OrderBySort> orderBySorts = new ArrayList<OrderBySort>();
-      
-      int idx = 0;
-      order = new Order[sortsArr.length];
-      for (String s : sortsArr) {
-        if (s == null) continue;
-        
-        String sortType = s.substring(0, 1);
-        String sortColumn = s.substring(1, s.length());
-        
-        order[idx++] = new Order(sortType.equals("+") ? Direction.ASC : Direction.DESC, sortColumn);
-        
-        OrderBySort orderBySort = OrderBySort.builder().sort(sortColumn).orderBy(sortType.equals("+") ? Direction.ASC.name() : Direction.DESC.name()).build();
-        orderBySorts.add(orderBySort);
-      }
-      
-      searchDto.setOrderBySorts(orderBySorts);
-    } 
-    
+    Predicate predicate = this.getPredicate(searchDto);
+       
     /* page */
-    Sort sort = new Sort(order);
-    PageRequest pageRequest = new PageRequest(pagingDto.getOffset(), pagingDto.getLimit(), sort);
+    PageRequest pageRequest = new PageRequest(pagingDto.getOffset(), pagingDto.getLimit(), searchDto.getPageSort());
     
-    Page<DiveLog> page = diveLogRepository.findAll(booleanBuilder, pageRequest);
+    Page<DiveLog> page = diveLogRepository.findAll(predicate, pageRequest);
     
     if (log.isInfoEnabled()) {
       log.info("getNumber : {}", page.getNumber());
@@ -172,11 +111,11 @@ public class DiveLogServiceImpl implements DiveLogService {
     }
     
     ResourcesDto resourcesDto = new ResourcesDto(page.getContent(), searchDto, pagingDto);
-    resourcesDto.putContent("total", diveLogRepository.count(booleanBuilder));
+    resourcesDto.putContent("total", diveLogRepository.count(predicate));
     
     return resourcesDto;
   }
-
+  
   @Transactional
   @Override
   public void update(Long id, DiveLogDto diveLogDto) {
@@ -227,6 +166,26 @@ public class DiveLogServiceImpl implements DiveLogService {
   @Override
   public void delete(Long id) {
     diveLogRepository.delete(id);
+  }
+  
+  public Predicate getPredicate(SearchDto searchDto) {
+    BooleanBuilder booleanBuilder = new BooleanBuilder();
+    QDiveLog qDiveLog = QDiveLog.diveLog;
+    for (SearchQ searchQ : searchDto.getQList()) {
+      switch (searchQ.getSearchColumn()) {
+      case "diveDate":
+        booleanBuilder.and(qDiveLog.diveDate.eq(DateUtil.getInstance().toDate(searchQ.getSearchValue(), DateUtil.FORMAT_YYYY_MM_DD)));
+        break;
+      case "divePlace":
+        booleanBuilder.and(qDiveLog.divePlace.like("%".concat(searchQ.getSearchValue()).concat("%")));
+        break;
+      case "diveType":
+        booleanBuilder.and(qDiveLog.diveType.eq(DiveTypeEnum.findByValue(searchQ.getSearchValue())));
+        break;
+      }
+    }
+    
+    return booleanBuilder;
   }
 
 }

@@ -15,6 +15,7 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.util.UriComponents;
 import org.springframework.web.util.UriComponentsBuilder;
@@ -37,12 +38,20 @@ public class DiveLogController {
   private DiveLogService diveLogService;
   
   @GetMapping(produces = MediaType.APPLICATION_JSON_VALUE)
-  public ResponseEntity<?> getDiveLogs(@ModelAttribute SearchDto searchDto, @ModelAttribute PagingDto pagingDto) {
+  public ResponseEntity<?> getDiveLogs(
+      @RequestParam(value = "sorts", required = false, defaultValue = "") String sorts, 
+      @RequestParam(value = "q", required = false, defaultValue = "") String q,
+      @RequestParam(value = "offset", required = false, defaultValue = "0") int offset,
+      @RequestParam(value = "limit", required = false, defaultValue = "10") int limit) {
+    
+    SearchDto searchDto = SearchDto.builder().q(q).sorts(sorts).build();
+    PagingDto pagingDto = PagingDto.builder().offset(offset).limit(limit).build();
+    
     return ResponseEntity.ok(diveLogService.getDiveLogs(searchDto, pagingDto));
   }
 
   @PostMapping(consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
-  public ResponseEntity<?> create(@Valid @RequestBody DiveLogDto diveLogDto, UriComponentsBuilder b,
+  public ResponseEntity<?> createDiveLog(@Valid @RequestBody DiveLogDto diveLogDto, UriComponentsBuilder b,
       HttpServletRequest request) throws Exception {
     
     DiveLog diveLog = diveLogService.set(diveLogDto);
@@ -62,7 +71,7 @@ public class DiveLogController {
   }
   
   @PutMapping(value = "/{id}", consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
-  public ResponseEntity<?> update(@PathVariable("id") Long id, @Valid @RequestBody DiveLogDto diveLogDto) throws Exception {
+  public ResponseEntity<?> updateDiveLog(@PathVariable("id") Long id, @Valid @RequestBody DiveLogDto diveLogDto) throws Exception {
     
     diveLogService.update(id, diveLogDto);
     
