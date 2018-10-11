@@ -43,7 +43,7 @@ public class DiveLogController {
   
   @ApiOperation(value = "다이브 로그 목록 조회 API")
   @ApiImplicitParams({
-    @ApiImplicitParam(name = "sorts", value = "정렬 타입(-:내림차순, +:오름차순) + 정렬 컬럼 ex)-diveNo,-regDate", required = false, dataType = "string", paramType = "path"),
+    @ApiImplicitParam(name = "sorts", value = "정렬 타입(-:내림차순, +:오름차순) + 정렬 컬럼 ex)-diveNo,-regDate", required = false, dataType = "string", paramType = "query"),
     @ApiImplicitParam(name = "q", value = "검색컬럼 + 검색 값 ex) diveDate=2018-08-26,diveType=BOAT,divePlace=Liloan ", required = false, dataType = "string", paramType = "query"),
     @ApiImplicitParam(name = "offset", value = "페이지 번호", required = false, dataType = "int", paramType = "query", defaultValue = "0"),
     @ApiImplicitParam(name = "limit", value = "페이지당 로우 카운트", required = false, dataType = "int", paramType = "query", defaultValue = "10")
@@ -73,6 +73,9 @@ public class DiveLogController {
   }
   
   @ApiOperation(value = "다이브 로그 조회 API")
+  @ApiImplicitParams({
+    @ApiImplicitParam(name = "id", value = "다이브 로그 아이디", required = true, dataType = "int", paramType = "path", defaultValue = ""),
+  })
   @GetMapping(value = "/{id}", produces = MediaType.APPLICATION_JSON_VALUE)
   public ResponseEntity<?> getDiveLog(@PathVariable("id") Long id)
       throws Exception {
@@ -84,6 +87,9 @@ public class DiveLogController {
   }
   
   @ApiOperation(value = "다이브 로그 수정 API")
+  @ApiImplicitParams({
+    @ApiImplicitParam(name = "id", value = "다이브 로그 아이디", required = true, dataType = "int", paramType = "path", defaultValue = ""),
+  })
   @PutMapping(value = "/{id}", consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
   public ResponseEntity<?> updateDiveLog(@PathVariable("id") Long id, @Valid @RequestBody DiveLogDto diveLogDto) throws Exception {
     
@@ -93,6 +99,9 @@ public class DiveLogController {
   }
   
   @ApiOperation(value = "다이브 로그 삭제 API")
+  @ApiImplicitParams({
+    @ApiImplicitParam(name = "id", value = "다이브 로그 아이디", required = true, dataType = "int", paramType = "path", defaultValue = ""),
+  })
   @DeleteMapping(value = "/{id}", produces = MediaType.APPLICATION_JSON_VALUE)
   public ResponseEntity<?> deleteDiveLog(@PathVariable("id") Long id)
       throws Exception {
