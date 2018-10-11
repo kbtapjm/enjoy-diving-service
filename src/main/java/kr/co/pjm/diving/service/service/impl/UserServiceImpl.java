@@ -14,14 +14,13 @@ import com.querydsl.core.types.Predicate;
 
 import kr.co.pjm.diving.common.domain.dto.UserBasicDto;
 import kr.co.pjm.diving.common.domain.dto.UserDiveDto;
-import kr.co.pjm.diving.common.domain.entity.QDiveLog;
-import kr.co.pjm.diving.common.domain.entity.QUser;
+import kr.co.pjm.diving.common.domain.entity.QUserBasic;
 import kr.co.pjm.diving.common.domain.entity.Role;
 import kr.co.pjm.diving.common.domain.entity.User;
 import kr.co.pjm.diving.common.domain.entity.UserBasic;
 import kr.co.pjm.diving.common.domain.entity.UserDive;
 import kr.co.pjm.diving.common.domain.entity.UserRole;
-import kr.co.pjm.diving.common.domain.enumeration.DiveTypeEnum;
+import kr.co.pjm.diving.common.domain.enumeration.GenderEnum;
 import kr.co.pjm.diving.common.domain.enumeration.RoleTypeEnum;
 import kr.co.pjm.diving.common.domain.enumeration.UserStatusEnum;
 import kr.co.pjm.diving.common.exception.ResourceNotFoundException;
@@ -30,7 +29,6 @@ import kr.co.pjm.diving.common.repository.UserBasicRepository;
 import kr.co.pjm.diving.common.repository.UserConnectionRepasitory;
 import kr.co.pjm.diving.common.repository.UserDiveRepository;
 import kr.co.pjm.diving.common.repository.UserRepository;
-import kr.co.pjm.diving.common.util.DateUtil;
 import kr.co.pjm.diving.service.common.domain.dto.PagingDto;
 import kr.co.pjm.diving.service.common.domain.dto.ResourcesDto;
 import kr.co.pjm.diving.service.common.domain.dto.SearchDto;
@@ -82,10 +80,20 @@ public class UserServiceImpl implements UserService {
   
   public Predicate getPredicate(SearchDto searchDto) {
     BooleanBuilder booleanBuilder = new BooleanBuilder();
-    QUser qUser = QUser.user;
+    QUserBasic qUserBasic = QUserBasic.userBasic;
     for (SearchQ searchQ : searchDto.getQList()) {
       switch (searchQ.getSearchColumn()) {
       case "name":
+        booleanBuilder.and(qUserBasic.name.like("%".concat(searchQ.getSearchValue()).concat("%")));
+        break;
+      case "nickname":
+        booleanBuilder.and(qUserBasic.name.like("%".concat(searchQ.getSearchValue()).concat("%")));
+        break;
+      case "gender":
+        booleanBuilder.and(qUserBasic.gender.eq(GenderEnum.findByValue(Integer.parseInt(searchQ.getSearchValue()))));
+        break;
+      case "country":
+        booleanBuilder.and(qUserBasic.name.eq(searchQ.getSearchValue()));
         break;
       }
     }
