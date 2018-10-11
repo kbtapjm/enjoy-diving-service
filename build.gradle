@@ -14,22 +14,17 @@ dependencies {
 
     compile project(':enjoy-diving-common')
     
-    // jdbc
     compile group: 'org.springframework.boot', name: 'spring-boot-starter-jdbc', version: "${springBootVersion}"
     compile group: 'org.springframework.boot', name: 'spring-boot-starter-data-jpa', version: "${springBootVersion}"
     
-    // devtools
     compile group: 'org.springframework.boot', name: 'spring-boot-devtools', version: "${springBootVersion}"
     
-    // data encrypt
     compile group: 'com.github.ulisesbocchio', name: 'jasypt-spring-boot-starter', version: '1.17'
     compile group: 'com.google.guava', name: 'guava', version: '20.0'
     
-    // swagger
     compile group: 'io.springfox', name: 'springfox-swagger2', version: '2.9.2'
     compile group: 'io.springfox', name: 'springfox-swagger-ui', version: '2.9.2'
     
-    // restdocs
     testCompile group: 'io.rest-assured', name: 'rest-assured', version: '3.0.2'
     testCompile group: 'org.springframework.restdocs', name: 'spring-restdocs-mockmvc', version: '1.2.2.RELEASE'
 }

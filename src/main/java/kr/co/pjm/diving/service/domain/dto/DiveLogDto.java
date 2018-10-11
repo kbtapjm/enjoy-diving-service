@@ -10,6 +10,7 @@ import javax.validation.constraints.Past;
 import org.hibernate.validator.constraints.NotEmpty;
 import org.springframework.format.annotation.DateTimeFormat;
 
+import io.swagger.annotations.ApiModelProperty;
 import kr.co.pjm.diving.common.domain.enumeration.DiveCurrentEnum;
 import kr.co.pjm.diving.common.domain.enumeration.DivePlanExrPtnEnum;
 import kr.co.pjm.diving.common.domain.enumeration.DivePlanToolEnum;
@@ -30,6 +31,7 @@ public class DiveLogDto extends CommonDto {
   
   /* 번호 */
   @NotEmpty(message = "{message.diveLog.diveNo.notEmpty}")
+  @ApiModelProperty(notes = "다이브 로그 번호", example = "1", required = true, position = 0)
   private String diveNo;
   
   /* 다이브 날짜 */

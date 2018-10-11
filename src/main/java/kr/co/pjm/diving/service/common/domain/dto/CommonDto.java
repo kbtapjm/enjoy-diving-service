@@ -2,14 +2,10 @@ package kr.co.pjm.diving.service.common.domain.dto;
 
 import java.util.Date;
 
-import javax.persistence.Temporal;
-import javax.persistence.TemporalType;
-
 import org.apache.commons.lang3.builder.ToStringBuilder;
 import org.apache.commons.lang3.builder.ToStringStyle;
-import org.springframework.format.annotation.DateTimeFormat;
 
-import com.fasterxml.jackson.annotation.JsonFormat;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 
 import lombok.Getter;
 import lombok.Setter;
@@ -17,9 +13,13 @@ import lombok.Setter;
 @Getter
 @Setter
 public abstract class CommonDto {
+  @JsonIgnore
   private String regId;
+  @JsonIgnore
   private Date regDate;
+  @JsonIgnore
   private String updateId;
+  @JsonIgnore
   private Date updateDate;
   
   @Override

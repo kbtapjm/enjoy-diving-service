@@ -30,7 +30,7 @@ import kr.co.pjm.diving.service.domain.dto.DiveLogDto;
 import kr.co.pjm.diving.service.service.DiveLogService;
 import lombok.extern.slf4j.Slf4j;
 
-@Api(value = "DiveLogController")
+@Api(value = "DiveLogController", description = "다이브 로그 API")
 @Slf4j
 @RestController
 @RequestMapping(value = DiveLogController.RESOURCE_PATH)
