@@ -13,12 +13,13 @@ import lombok.Setter;
 @Getter
 @Setter
 public abstract class CommonDto {
-  @JsonIgnore
   private String regId;
+  
+  private String updateId;
+  
   @JsonIgnore
   private Date regDate;
-  @JsonIgnore
-  private String updateId;
+  
   @JsonIgnore
   private Date updateDate;
   

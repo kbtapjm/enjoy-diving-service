@@ -10,6 +10,7 @@ import javax.validation.constraints.Past;
 import org.hibernate.validator.constraints.NotEmpty;
 import org.springframework.format.annotation.DateTimeFormat;
 
+import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
 import kr.co.pjm.diving.common.domain.enumeration.DiveCurrentEnum;
 import kr.co.pjm.diving.common.domain.enumeration.DivePlanExrPtnEnum;
@@ -17,6 +18,7 @@ import kr.co.pjm.diving.common.domain.enumeration.DivePlanToolEnum;
 import kr.co.pjm.diving.common.domain.enumeration.DiveTypeEnum;
 import kr.co.pjm.diving.common.domain.enumeration.DiveWaterEnum;
 import kr.co.pjm.diving.common.domain.enumeration.DiveWaveEnum;
+import kr.co.pjm.diving.common.domain.enumeration.YnEnum;
 import kr.co.pjm.diving.service.common.domain.dto.CommonDto;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -27,137 +29,144 @@ import lombok.Setter;
 @Setter
 @NoArgsConstructor
 @AllArgsConstructor
+@ApiModel(description = "다이브 로그 DTO")
 public class DiveLogDto extends CommonDto {
   
-  /* 번호 */
-  @NotEmpty(message = "{message.diveLog.diveNo.notEmpty}")
   @ApiModelProperty(notes = "다이브 로그 번호", example = "1", required = true, position = 0)
+  @NotEmpty(message = "{message.diveLog.diveNo.notEmpty}")
   private String diveNo;
   
-  /* 다이브 날짜 */
+  @ApiModelProperty(notes = "다이브 날짜", example = "yyyy-MM-dd", required = true, position = 1)
   @Past
   @DateTimeFormat(pattern="yyyy-MM-dd")
   private Date diveDate;
   
-  /* 다이브 장소 */
+  @ApiModelProperty(notes = "다이브 장소", example = "Raja Ampat", required = true, position = 2)
   @NotEmpty(message = "{message.diveLog.divePlace.notEmpty}")
   private String divePlace;
   
-  /* 다이브 포인트 */
+  @ApiModelProperty(notes = "다이브 포인트", example = "Melisa's Garden", required = true, position = 3)
   @NotEmpty(message = "{message.diveLog.divePoint.notEmpty}")
   private String divePoint;
   
-  /* 다이브 입수 시간(시) */
+  @ApiModelProperty(notes = "다이브 입수 시간(시)", example = "09", required = true, position = 4)
   @NotEmpty(message = "{message.diveLog.diveInHour.notEmpty}")
   private String diveInHour;
   
-  /* 다이브 입수 시간(분) */
+  @ApiModelProperty(notes = "다이브 입수 시간(분)", example = "10", required = true, position = 5)
   @NotEmpty(message = "{message.diveLog.diveInMinute.notEmpty}")
   private String diveInMinute;
   
-  /* 다이브 출수 시간(시) */
+  @ApiModelProperty(notes = "다이브 출수 시간(시)", example = "09", required = true, position = 6)
   @NotEmpty(message = "{message.diveLog.diveOutHour.notEmpty}")
   private String diveOutHour;
   
-  /* 다이브 출수 시간(분) */
+  @ApiModelProperty(notes = "다이브 출수 시간(분)", example = "55", required = true, position = 7)
   @NotEmpty(message = "{message.diveLog.diveOutMinute.notEmpty}")
   private String diveOutMinute;
   
-  /* 탱크 압력 시작(bar) */
+  @ApiModelProperty(notes = "탱크 압력 시작(bar)", example = "200", required = true, position = 8)
   @NotEmpty(message = "{message.diveLog.diveTankStart.notEmpty}")
   private String diveTankStart;
   
-  /* 탱크 압력 종료(bar) */
+  @ApiModelProperty(notes = "탱크 압력 종료(bar)", example = "40", required = true, position = 9)
   @NotEmpty(message = "{message.diveLog.diveTankEnd.notEmpty}")
   private String diveTankEnd;
   
-  /* 수면 휴식 시간(시) */
+  @ApiModelProperty(notes = "수면 휴식 시간(시)", example = "01", required = false, position = 10)
   private String groundRestHour;
   
-  /* 수면 휴식 시간(분) */
+  @ApiModelProperty(notes = "수면 휴식 시간(분)", example = "10", required = false, position = 11)
   private String groundRestMinute;
   
-  /* 최대 수심 */
+  @ApiModelProperty(notes = "최대 수심", example = "29.5", required = true, position = 12)
   @NotEmpty(message = "{message.diveLog.maxDepth.notEmpty}")
   private String maxDepth;
   
-  /* 평균 수심 */
+  @ApiModelProperty(notes = "평균 수심", example = "16.8", required = true, position = 13)
   @NotEmpty(message = "{message.diveLog.avgDepth.notEmpty}")
   private String avgDepth;
   
-  /* 다이브 시간(min) */
+  @ApiModelProperty(notes = "다이브 시간(min)", example = "45", required = true, position = 14)
   @NotEmpty(message = "{message.diveLog.diveTime.notEmpty}")
   private String diveTime;
   
-  /* 안전정지 시간 */
+  @ApiModelProperty(notes = "안전정지 시간", example = "3", required = true, position = 15)
   @NotEmpty(message = "{message.diveLog.diveSafetyTime.notEmpty}")
   private String diveSafetyTime;
   
-  /* 다이빙 계획 도구 */
+  @ApiModelProperty(notes = "다이빙 계획 도구", required = true, position = 16)
   @NotNull(message = "{message.diveLog.divePlanTool.notEmpty}")
   @Enumerated(EnumType.STRING)
   private DivePlanToolEnum divePlanTool;
   
-  /* 웨이트(Kg) */
+  @ApiModelProperty(notes = "웨이트(Kg)", example = "4", required = false, position = 17)
   private String divePlanWeight;
   
-  /* Eanx(나이트록스) */
+  @ApiModelProperty(notes = "Eanx(나이트록스)", example = "21", required = false, position = 18)
   private String divePlanEanx;
   
-  /* 노출 보호 */
+  @ApiModelProperty(notes = "노출 보호", required = true, position = 19)
   @Enumerated(EnumType.STRING)
   @NotNull(message = "{message.diveLog.divePlanExrPtn.notEmpty}")
   private DivePlanExrPtnEnum divePlanExrPtn;
   
-  /* 다이브 후드 여부 */
-  private String divePlanHoodYn;
+  @ApiModelProperty(notes = "다이브 후드 여부", required = false, position = 20)
+  @Enumerated(EnumType.STRING)
+  private YnEnum divePlanHoodYn;
   
-  /* 다이브 장갑 여부 */
-  private String divePlanGlovesYn;
+  @ApiModelProperty(notes = "다이브 장갑 여부", required = false, position = 21)
+  @Enumerated(EnumType.STRING)
+  private YnEnum divePlanGlovesYn;
   
-  /* 다이브 부츠 여부 */
-  private String divePlanBootsYn;
+  @ApiModelProperty(notes = "다이브 부츠 여부", required = false, position = 22)
+  @Enumerated(EnumType.STRING)
+  private YnEnum divePlanBootsYn;
   
-  /* 다이브 라이트 여부 */
-  private String divePlanLightYn;
+  @ApiModelProperty(notes = "다이브 라이트 여부", required = false, position = 23)
+  @Enumerated(EnumType.STRING)
+  private YnEnum divePlanLightYn;
   
-  /* 다이브 SMB 여부 */
-  private String divePlanSmbYn;
+  @ApiModelProperty(notes = "다이브 SMB 여부", required = false, position = 24)
+  @Enumerated(EnumType.STRING)
+  private YnEnum divePlanSmbYn;
   
-  /* 다이브 나이프 여부 */
-  private String divePlanKnifeYn;
+  @ApiModelProperty(notes = "다이브 나이프 여부", required = false, position = 25)
+  @Enumerated(EnumType.STRING)
+  private YnEnum divePlanKnifeYn;
   
-  /* 다이브 카메라 여부 */
-  private String divePlanCameraYn;
+  @ApiModelProperty(notes = "다이브 카메라 여부", required = false, position = 26)
+  @Enumerated(EnumType.STRING)
+  private YnEnum divePlanCameraYn;
   
-  /* 시야 */
+  @ApiModelProperty(notes = "시야", example = "17.5", required = true, position = 27)
   @NotEmpty(message = "{message.diveLog.visibility.notEmpty}")
   private String visibility;
   
-  /* 수온 */
+  @ApiModelProperty(notes = "수온", example = "29.5", required = true, position = 28)
   @NotEmpty(message = "{message.diveLog.temperature.notEmpty}")
   private String temperature;
   
-  /* 다이브 유형 */
+  @ApiModelProperty(notes = "다이브 유형", required = false, position = 29)
   @Enumerated(EnumType.STRING)
   private DiveTypeEnum diveType;
   
-  /* 다이브 워터 */
+  @ApiModelProperty(notes = "다이브 워터", required = false, position = 30)
   @Enumerated(EnumType.STRING)
   private DiveWaterEnum diveWater;
   
-  /* 다이브 파도 */
+  @ApiModelProperty(notes = "다이브 파도", required = false, position = 31)
   @Enumerated(EnumType.STRING)
   private DiveWaveEnum diveWave;
   
-  /* 다이브 조류  */
+  @ApiModelProperty(notes = "다이브 조류", required = false, position = 32)
   @Enumerated(EnumType.STRING)
   private DiveCurrentEnum diveCurrent;
   
-  /* 다이브 활동 */
+  @ApiModelProperty(notes = "다이브 활동", example = "펀다이빙", required = false, position = 33)
   private String diveActivity;
   
-  /* 다이브 노트 */
+  @ApiModelProperty(notes = "다이브 노트", example = "라자암팟 최고의 포인트", required = false, position = 34)
   private String diveNote;
 
 }
