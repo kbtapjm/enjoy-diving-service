@@ -1,5 +1,7 @@
 package kr.co.pjm.diving.service.service.impl;
 
+import java.util.List;
+
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.support.MessageSourceAccessor;
@@ -12,8 +14,10 @@ import org.springframework.transaction.annotation.Transactional;
 import com.querydsl.core.BooleanBuilder;
 import com.querydsl.core.types.Predicate;
 
+import kr.co.pjm.diving.common.domain.dto.ResourcesDto;
 import kr.co.pjm.diving.common.domain.dto.UserBasicDto;
 import kr.co.pjm.diving.common.domain.dto.UserDiveDto;
+import kr.co.pjm.diving.common.domain.entity.QUser;
 import kr.co.pjm.diving.common.domain.entity.QUserBasic;
 import kr.co.pjm.diving.common.domain.entity.Role;
 import kr.co.pjm.diving.common.domain.entity.User;
@@ -30,7 +34,6 @@ import kr.co.pjm.diving.common.repository.UserConnectionRepasitory;
 import kr.co.pjm.diving.common.repository.UserDiveRepository;
 import kr.co.pjm.diving.common.repository.UserRepository;
 import kr.co.pjm.diving.service.common.domain.dto.PagingDto;
-import kr.co.pjm.diving.service.common.domain.dto.ResourcesDto;
 import kr.co.pjm.diving.service.common.domain.dto.SearchDto;
 import kr.co.pjm.diving.service.common.domain.dto.SearchDto.SearchQ;
 import kr.co.pjm.diving.service.domain.dto.UserDto;
@@ -63,7 +66,7 @@ public class UserServiceImpl implements UserService {
   MessageSourceAccessor msa;
   
   @Override
-  public ResourcesDto getUsers(SearchDto searchDto, PagingDto pagingDto) {
+  public List<User> getUsers(SearchDto searchDto, PagingDto pagingDto) {
     /* search */
     Predicate predicate = this.getPredicate(searchDto);
        
@@ -75,14 +78,19 @@ public class UserServiceImpl implements UserService {
     ResourcesDto resourcesDto = new ResourcesDto(page.getContent(), searchDto, pagingDto);
     resourcesDto.putContent("total", userRepository.count(predicate));
     
-    return resourcesDto;
+    return page.getContent();
   }
   
   public Predicate getPredicate(SearchDto searchDto) {
     BooleanBuilder booleanBuilder = new BooleanBuilder();
     QUserBasic qUserBasic = QUserBasic.userBasic;
+    QUser qUser = QUser.user;
+    
     for (SearchQ searchQ : searchDto.getQList()) {
       switch (searchQ.getSearchColumn()) {
+      case "email":
+        booleanBuilder.and(qUser.email.eq(searchQ.getSearchValue()));
+        break;
       case "name":
         booleanBuilder.and(qUserBasic.name.like("%".concat(searchQ.getSearchValue()).concat("%")));
         break;

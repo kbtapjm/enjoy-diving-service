@@ -19,7 +19,6 @@ import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.util.UriComponents;
 import org.springframework.web.util.UriComponentsBuilder;
 
-import io.swagger.annotations.ApiOperation;
 import kr.co.pjm.diving.common.domain.entity.User;
 import kr.co.pjm.diving.service.common.domain.dto.PagingDto;
 import kr.co.pjm.diving.service.common.domain.dto.SearchDto;
