@@ -43,7 +43,7 @@ public class DiveLogController {
   
   @ApiOperation(value = "다이브 로그 목록 조회 API")
   @ApiImplicitParams({
-    @ApiImplicitParam(name = "sorts", value = "정렬 타입(-:내림차순, +:오름차순) + 정렬 컬럼 ex)-diveNo,-regDate", required = false, dataType = "string", paramType = "query"),
+    @ApiImplicitParam(name = "sorts", value = "정렬 타입(-:내림차순, +:오름차순) + 정렬 컬럼 ex)+diveNo,-regDate", required = false, dataType = "string", paramType = "query"),
     @ApiImplicitParam(name = "q", value = "검색컬럼 + 검색 값 ex) diveDate=2018-08-26,diveType=BOAT,divePlace=Liloan ", required = false, dataType = "string", paramType = "query"),
     @ApiImplicitParam(name = "offset", value = "페이지 번호", required = false, dataType = "int", paramType = "query", defaultValue = "0"),
     @ApiImplicitParam(name = "limit", value = "페이지당 로우 카운트", required = false, dataType = "int", paramType = "query", defaultValue = "10")
