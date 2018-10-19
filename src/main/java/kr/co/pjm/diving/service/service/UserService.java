@@ -2,9 +2,9 @@ package kr.co.pjm.diving.service.service;
 
 import java.util.List;
 
+import kr.co.pjm.diving.common.domain.dto.PagingDto;
+import kr.co.pjm.diving.common.domain.dto.SearchDto;
 import kr.co.pjm.diving.common.domain.entity.User;
-import kr.co.pjm.diving.service.common.domain.dto.PagingDto;
-import kr.co.pjm.diving.service.common.domain.dto.SearchDto;
 import kr.co.pjm.diving.service.domain.dto.UserDto;
 
 public interface UserService {

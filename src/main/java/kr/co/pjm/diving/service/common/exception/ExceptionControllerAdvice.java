@@ -16,8 +16,8 @@ import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.RestController;
 
+import kr.co.pjm.diving.common.domain.dto.ErrorDto;
 import kr.co.pjm.diving.common.exception.ResourceNotFoundException;
-import kr.co.pjm.diving.service.common.domain.dto.ErrorDto;
 import lombok.extern.slf4j.Slf4j;
 
 @Slf4j
