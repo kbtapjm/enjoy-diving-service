@@ -13,24 +13,20 @@ import com.fasterxml.jackson.annotation.JsonIgnore;
 
 import kr.co.pjm.diving.common.domain.enumeration.GenderEnum;
 import kr.co.pjm.diving.common.domain.enumeration.UserStatusEnum;
-import lombok.AllArgsConstructor;
 import lombok.Getter;
-import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 public class UserDto {
 
   @Getter
   @Setter
-  @NoArgsConstructor
-  @AllArgsConstructor
   public static class Create {
     @NotEmpty(message = "{message.user.email.notEmpty}")
     @Email(message = "{message.user.email.valid}")
     private String email;
 
     @NotEmpty(message = "{message.user.password.notEmpty}")
-    @Pattern(regexp = "((?=.*\\d)(?=.*[a-z])(?=.*[A-Z])(?=.*[!@#$%]).{6,20})", message = "{message.user.password.pattern}")
+    //@Pattern(regexp = "((?=.*\\d)(?=.*[a-z])(?=.*[A-Z])(?=.*[!@#$%]).{6,20})", message = "{message.user.password.pattern}")
     @Size(min = 6, max = 20, message = "{message.user.password.size}")
     private String password;
 
@@ -55,8 +51,6 @@ public class UserDto {
 
   @Getter
   @Setter
-  @NoArgsConstructor
-  @AllArgsConstructor
   public static class Update {
     @NotEmpty(message = "{message.user.name.notEmpty}")
     @Size(min = 1, max = 100, message = "{message.user.name.size}")

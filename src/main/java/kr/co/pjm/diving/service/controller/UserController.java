@@ -49,8 +49,8 @@ public class UserController {
     return ResponseEntity.ok(userService.getUsers(searchDto, pagingDto));
   }
 
-  @PostMapping(consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
-  public ResponseEntity<?> createUser(@Valid @RequestBody UserDto.Create userCreate, UriComponentsBuilder b, HttpServletRequest request)
+  @PostMapping(consumes = MediaType.APPLICATION_JSON_VALUE)
+  public ResponseEntity<?> createUser(@RequestBody UserDto.Create userCreate, UriComponentsBuilder b, HttpServletRequest request)
       throws Exception {
     User user = userService.set(userCreate);
 
