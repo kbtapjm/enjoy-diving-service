@@ -215,4 +215,15 @@ public class UserServiceImpl implements UserService {
     userConnectionRepasitory.deleteUserConnection(user.getEmail());
   }
 
+  @Override
+  @Transactional
+  public void updateLoginDate(Long id) {
+    UserBasicDto userBasicDto = new UserBasicDto();
+    userBasicDto.setId(id);
+    
+    userBasicRepository.updateLoginDate(userBasicDto);
+  }
+  
+  
+
 }

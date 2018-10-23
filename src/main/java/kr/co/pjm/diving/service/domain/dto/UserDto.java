@@ -1,5 +1,7 @@
 package kr.co.pjm.diving.service.domain.dto;
 
+import java.util.Date;
+
 import javax.persistence.EnumType;
 import javax.persistence.Enumerated;
 import javax.validation.constraints.NotNull;
@@ -77,6 +79,9 @@ public class UserDto {
     private String team;
 
     private String signature;
+    
+    @JsonIgnore
+    private Date loginDate;
   }
 
 }

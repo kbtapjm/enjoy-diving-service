@@ -20,5 +20,7 @@ public interface UserService {
   void update(Long id, UserDto.Update update);
   
   void delete(Long id);
+  
+  void updateLoginDate(Long id);
 
 }
