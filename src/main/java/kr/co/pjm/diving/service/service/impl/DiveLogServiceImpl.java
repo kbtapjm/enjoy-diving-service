@@ -75,6 +75,9 @@ public class DiveLogServiceImpl implements DiveLogService {
       case "diveType":
         booleanBuilder.and(qDiveLog.diveType.eq(DiveTypeEnum.findByValue(searchQ.getSearchValue())));
         break;
+      case "regId":
+        booleanBuilder.and(qDiveLog.regId.eq(searchQ.getSearchValue()));
+        break;
       }
     }
     
