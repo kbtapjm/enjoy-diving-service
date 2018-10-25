@@ -28,7 +28,7 @@ public class UserDto {
     private String email;
 
     @NotEmpty(message = "{message.user.password.notEmpty}")
-    //@Pattern(regexp = "((?=.*\\d)(?=.*[a-z])(?=.*[A-Z])(?=.*[!@#$%]).{6,20})", message = "{message.user.password.pattern}")
+    @Pattern(regexp = "((?=.*\\d)(?=.*[a-z])(?=.*[A-Z])(?=.*[!@#$%]).{6,20})", message = "{message.user.password.pattern}")
     @Size(min = 6, max = 20, message = "{message.user.password.size}")
     private String password;
 

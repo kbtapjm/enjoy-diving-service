@@ -20,7 +20,6 @@ import kr.co.pjm.diving.common.domain.enumeration.DiveWaterEnum;
 import kr.co.pjm.diving.common.domain.enumeration.DiveWaveEnum;
 import kr.co.pjm.diving.common.domain.enumeration.YnEnum;
 import kr.co.pjm.diving.service.common.domain.dto.CommonDto;
-import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
@@ -28,7 +27,6 @@ import lombok.Setter;
 @Getter
 @Setter
 @NoArgsConstructor
-@AllArgsConstructor
 @ApiModel(description = "다이브 로그 DTO")
 public class DiveLogDto extends CommonDto {
   

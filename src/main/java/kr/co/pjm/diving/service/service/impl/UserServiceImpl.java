@@ -223,7 +223,5 @@ public class UserServiceImpl implements UserService {
     
     userBasicRepository.updateLoginDate(userBasicDto);
   }
-  
-  
 
 }
