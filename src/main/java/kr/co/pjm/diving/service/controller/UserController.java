@@ -3,7 +3,13 @@ package kr.co.pjm.diving.service.controller;
 import javax.servlet.http.HttpServletRequest;
 import javax.validation.Valid;
 
+import static org.springframework.hateoas.mvc.ControllerLinkBuilder.linkTo;
+import static org.springframework.hateoas.mvc.ControllerLinkBuilder.methodOn;
+
+import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.hateoas.Resource;
+import org.springframework.hateoas.mvc.ControllerLinkBuilder;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
@@ -37,7 +43,7 @@ public class UserController {
   private UserService userService;
   
   @GetMapping(produces = MediaType.APPLICATION_JSON_VALUE)
-  public ResponseEntity<?> getUsers(
+  public ResponseEntity<?> getUsers(@PathVariable("version") String version,
       @RequestParam(value = "sorts", required = false, defaultValue = "") String sorts, 
       @RequestParam(value = "q", required = false, defaultValue = "") String q,
       @RequestParam(value = "offset", required = false, defaultValue = "0") int offset,
@@ -59,13 +65,18 @@ public class UserController {
   }
 
   @GetMapping(value = "/{id}", produces = MediaType.APPLICATION_JSON_VALUE)
-  public ResponseEntity<?> getUser(@PathVariable("version") String version, @PathVariable("id") Long id)
+  public Resource<User> getUser(@PathVariable("version") String version, @PathVariable("id") Long id)
       throws Exception {
     if (log.isDebugEnabled()) {
       log.debug("api version : {}", version);
     }
+    
+    Resource<User> resource = new Resource<User>(userService.getById(id));
+    
+    ControllerLinkBuilder linkTo = linkTo(methodOn(this.getClass()).getUsers("v1", StringUtils.EMPTY, StringUtils.EMPTY, 0, 10));
+    resource.add(linkTo.withRel("users"));
 
-    return ResponseEntity.ok(userService.getById(id));
+    return resource;
   }
   
   @PutMapping(value = "/{id}", consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)

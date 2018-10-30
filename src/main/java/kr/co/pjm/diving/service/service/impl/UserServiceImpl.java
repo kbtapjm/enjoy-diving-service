@@ -62,8 +62,8 @@ public class UserServiceImpl implements UserService {
   @Autowired
   private PasswordEncoder passwordEncoder;
   
-  @Autowired 
-  MessageSourceAccessor msa;
+  /*@Autowired 
+  MessageSourceAccessor msa;*/
   
   @Override
   public List<User> getUsers(SearchDto searchDto, PagingDto pagingDto) {
@@ -158,7 +158,7 @@ public class UserServiceImpl implements UserService {
   public User getById(Long id) {
     User user = userRepository.findOne(id);
     if (user == null) {
-      throw new ResourceNotFoundException(msa.getMessage("message.common.resource.not.found", new String[]{ String.valueOf(id) }));
+      throw new ResourceNotFoundException(String.valueOf(id));
     }
     
     return user;
@@ -168,7 +168,7 @@ public class UserServiceImpl implements UserService {
   public User getByEmail(String email) {
     User user = userRepository.findByEmail(email); 
     if (user == null) {
-      throw new ResourceNotFoundException(msa.getMessage("message.common.resource.not.found", new String[]{ email }));
+      throw new ResourceNotFoundException(email);
     }
     
     return user;
@@ -206,7 +206,7 @@ public class UserServiceImpl implements UserService {
   public void delete(Long id) {
     User user = userRepository.findOne(id);
     if (user == null) {
-      throw new ResourceNotFoundException(msa.getMessage("message.common.resource.not.found", new String[]{ String.valueOf(id) }));
+      throw new ResourceNotFoundException(String.valueOf(id));
     }
     
     userBasicRepository.delete(id);

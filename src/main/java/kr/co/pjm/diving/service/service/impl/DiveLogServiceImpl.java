@@ -3,6 +3,7 @@ package kr.co.pjm.diving.service.service.impl;
 import java.util.Date;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.context.support.MessageSourceAccessor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
@@ -33,8 +34,9 @@ public class DiveLogServiceImpl implements DiveLogService {
   @Autowired
   private DiveLogRepository diveLogRepository;
   
-  @Autowired 
-  MessageSourceAccessor msa;
+  /*@Autowired
+  @Qualifier
+  MessageSourceAccessor msa;*/
   
   @Override
   public ResourcesDto getDiveLogs(SearchDto searchDto, PagingDto pagingDto) {
@@ -133,7 +135,7 @@ public class DiveLogServiceImpl implements DiveLogService {
   public DiveLog getById(Long id) {
     DiveLog diveLog = diveLogRepository.findOne(id);
     if (diveLog == null) {
-      throw new ResourceNotFoundException(msa.getMessage("message.common.resource.not.found", new String[]{ String.valueOf(id) }));
+      throw new ResourceNotFoundException(String.valueOf(id));
     }
     
     return diveLogRepository.findOne(id);
