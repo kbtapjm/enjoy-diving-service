@@ -1,15 +1,18 @@
 package kr.co.pjm.diving.service.controller;
 
-import javax.servlet.http.HttpServletRequest;
-import javax.validation.Valid;
-
 import static org.springframework.hateoas.mvc.ControllerLinkBuilder.linkTo;
 import static org.springframework.hateoas.mvc.ControllerLinkBuilder.methodOn;
 
-import org.apache.commons.lang3.StringUtils;
+import java.util.ArrayList;
+import java.util.List;
+
+import javax.servlet.http.HttpServletRequest;
+import javax.validation.Valid;
+
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.hateoas.Link;
 import org.springframework.hateoas.Resource;
-import org.springframework.hateoas.mvc.ControllerLinkBuilder;
+import org.springframework.hateoas.Resources;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
@@ -38,21 +41,34 @@ import lombok.extern.slf4j.Slf4j;
 public class UserController {
 
   static final String RESOURCE_PATH = "/{version}/users";
+  final String API_VERSION = "v1";
 
   @Autowired
   private UserService userService;
   
   @GetMapping(produces = MediaType.APPLICATION_JSON_VALUE)
-  public ResponseEntity<?> getUsers(@PathVariable("version") String version,
+  public Resources<Resource<User>> getUsers(@PathVariable("version") String version,
       @RequestParam(value = "sorts", required = false, defaultValue = "") String sorts, 
       @RequestParam(value = "q", required = false, defaultValue = "") String q,
       @RequestParam(value = "offset", required = false, defaultValue = "0") int offset,
-      @RequestParam(value = "limit", required = false, defaultValue = "10") int limit) {
+      @RequestParam(value = "limit", required = false, defaultValue = "10") int limit) throws Exception {
+    
+    List<Resource<User>> resources = new ArrayList<Resource<User>>();
     
     SearchDto searchDto = SearchDto.builder().q(q).sorts(sorts).build();
     PagingDto pagingDto = PagingDto.builder().offset(offset).limit(limit).build();
     
-    return ResponseEntity.ok(userService.getUsers(searchDto, pagingDto));
+    List<User> users = userService.getUsers(searchDto, pagingDto);
+    for (User u : users) {
+      Resource<User> resource = new Resource<User>(userService.getById(u.getId()));
+      resource.add(linkTo(methodOn(UserController.class).getUser(API_VERSION, u.getId())).withSelfRel());
+      
+      resources.add(resource);
+    }
+    
+    Link selfRel = linkTo(methodOn(UserController.class).getUsers(version, sorts, q, offset, limit)).withSelfRel();
+    
+    return new Resources<>(resources, selfRel);
   }
 
   @PostMapping(consumes = MediaType.APPLICATION_JSON_VALUE)
@@ -72,9 +88,7 @@ public class UserController {
     }
     
     Resource<User> resource = new Resource<User>(userService.getById(id));
-    
-    ControllerLinkBuilder linkTo = linkTo(methodOn(this.getClass()).getUsers("v1", StringUtils.EMPTY, StringUtils.EMPTY, 0, 10));
-    resource.add(linkTo.withRel("users"));
+    resource.add(linkTo(methodOn(UserController.class).getUser(API_VERSION, id)).withSelfRel());
 
     return resource;
   }
