@@ -4,7 +4,6 @@ import java.util.List;
 
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.context.support.MessageSourceAccessor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.security.crypto.password.PasswordEncoder;
@@ -61,9 +60,6 @@ public class UserServiceImpl implements UserService {
   
   @Autowired
   private PasswordEncoder passwordEncoder;
-  
-  /*@Autowired 
-  MessageSourceAccessor msa;*/
   
   @Override
   public List<User> getUsers(SearchDto searchDto, PagingDto pagingDto) {

@@ -1,4 +1,3 @@
-
 server:
   port: 8081
   tomcat:
@@ -14,7 +13,7 @@ spring:
     ansi:
       enabled: always
   profiles:
-    active: local
+    active: dev
   http:
     encoding:
       charset: UTF-8
@@ -22,26 +21,11 @@ spring:
 security:
   basic:
     enabled: false 
-    
+
 ---
-# local profile(개발자 환경)
+# local
 spring:
   profiles: local
-  profiles.include: mysqlDB
-
-logging:
-  level:
-    root: DEBUG 
-    org.apache: INFO
-  config: classpath:config/logback-spring.xml
-  file : local
-  path : data/logs
-  
-  
----
-# h2database profile
-spring:
-  profiles: h2database
   h2:
     console:
       enabled: true
@@ -57,11 +41,23 @@ spring:
     initialize: true
     schema: classpath:database/sql/ddl-*.sql
     data: classpath:database/sql/dml-*.sql
-    
----
-# maria db profile
+
+logging:
+  level:
+    root: DEBUG 
+    org.apache: INFO
+  config: classpath:config/logback-spring.xml
+  file : local
+  path : data/logs
+  
+props:
+  appName: enjoy-diving-service-local
+  apiVersion: v1
+---  
+
+# dev
 spring:
-  profiles: mysqlDB
+  profiles: dev
   datasource:
     url: ENC(JhbAOrO9c0MhlBJkcBhM15vkfabBJgxc4dxv+S93sxLPAcCMCjlXIfJFEBvXMNLr)
     username: ENC(jauxnix93NIxNidJQpxZGQ==)
@@ -81,3 +77,48 @@ spring:
         format_sql: true
         use_sql_comments: true
       
+logging:
+  level:
+    root: DEBUG 
+    org.apache: INFO
+  config: classpath:config/logback-spring.xml
+  file : local
+  path : data/logs
+
+props:
+  appName: enjoy-diving-service-dev
+  apiVersion: v1
+
+---  
+
+# stg
+spring:
+  profiles: stg
+  datasource:
+    url: ENC(JhbAOrO9c0MhlBJkcBhM15vkfabBJgxc4dxv+S93sxLPAcCMCjlXIfJFEBvXMNLr)
+    username: ENC(jauxnix93NIxNidJQpxZGQ==)
+    password: ENC(Jbk2+ry3C3T9suJEsBqWow==)
+    driver-class-name: com.mysql.jdbc.Driver
+    sql-script-encoding: UTF-8
+  jpa:
+    database: mysql
+    show-sql: true
+    hibernate:
+      ddl-auto: validate
+    properties:
+      hibernate:
+        show_sql: true
+        format_sql: true
+        use_sql_comments: true
+      
+logging:
+  level:
+    root: INFO 
+    org.apache: INFO
+  config: classpath:config/logback-spring.xml
+  file : local
+  path : data/logs
+  
+props:
+  appName: enjoy-diving-service-stg
+  apiVersion: v1

@@ -1,0 +1,12 @@
+{"properties": [
+  {
+    "name": "props.app-name",
+    "type": "java.lang.String",
+    "description": "A description for 'props.app-name'"
+  },
+  {
+    "name": "props.api-version",
+    "type": "java.lang.String",
+    "description": "A description for 'props.api-version'"
+  }
+]}

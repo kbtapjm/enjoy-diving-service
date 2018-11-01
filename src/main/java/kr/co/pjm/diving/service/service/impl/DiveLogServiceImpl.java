@@ -3,8 +3,6 @@ package kr.co.pjm.diving.service.service.impl;
 import java.util.Date;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Qualifier;
-import org.springframework.context.support.MessageSourceAccessor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Service;
@@ -33,10 +31,6 @@ public class DiveLogServiceImpl implements DiveLogService {
   
   @Autowired
   private DiveLogRepository diveLogRepository;
-  
-  /*@Autowired
-  @Qualifier
-  MessageSourceAccessor msa;*/
   
   @Override
   public ResourcesDto getDiveLogs(SearchDto searchDto, PagingDto pagingDto) {
