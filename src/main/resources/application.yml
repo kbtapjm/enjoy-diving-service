@@ -20,7 +20,18 @@ spring:
        
 security:
   basic:
-    enabled: false 
+    enabled: false
+
+management:
+  security:
+    enabled: false
+  context-path: /application
+  port: 9090
+
+endpoints:
+  sensitive: false 
+  beans:
+    enabled: true
 
 ---
 # local
