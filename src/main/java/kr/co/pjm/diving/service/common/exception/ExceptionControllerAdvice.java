@@ -1,6 +1,5 @@
 package kr.co.pjm.diving.service.common.exception;
 
-import java.util.Date;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -30,16 +29,26 @@ public class ExceptionControllerAdvice {
     List<String> errors = e.getBindingResult().getAllErrors().stream().map(ObjectError::getDefaultMessage)
         .collect(Collectors.toList());
     
-    if (log.isDebugEnabled()) log.debug("errors : {}", errors.toString()); 
-
-    ErrorDto errorDto = new ErrorDto(errors.toString(), HttpStatus.BAD_REQUEST.value(), req.getRequestURI(), new Date());
+    if (log.isDebugEnabled()) {
+      log.debug("errors : {}", errors.toString()); 
+    }
+    
+    ErrorDto errorDto = ErrorDto.builder()
+        .path(req.getRequestURI())
+        .status(HttpStatus.BAD_REQUEST.value())
+        .message(errors.toString())
+        .build();
     
     return new ResponseEntity<ErrorDto>(errorDto, HttpStatus.BAD_REQUEST);
   }
 
   @ExceptionHandler(value = ResourceNotFoundException.class)
   public ResponseEntity<ErrorDto> handlerResourceNotFoundException(HttpServletRequest req, ResourceNotFoundException e) {
-    ErrorDto errorDto = new ErrorDto(e.getMessage(), HttpStatus.NOT_FOUND.value(), req.getRequestURI(), new Date());
+    ErrorDto errorDto = ErrorDto.builder()
+        .path(req.getRequestURI())
+        .status(HttpStatus.NOT_FOUND.value())
+        .message(e.getMessage())
+        .build();
 
     return new ResponseEntity<ErrorDto>(errorDto, HttpStatus.NOT_FOUND);
   }
@@ -48,7 +57,11 @@ public class ExceptionControllerAdvice {
   public ResponseEntity<ErrorDto> handlerHttpRequestMethodNotSupportedException(HttpServletRequest req,
       HttpRequestMethodNotSupportedException e) {
 
-    ErrorDto errorDto = new ErrorDto(e.getMessage(), HttpStatus.METHOD_NOT_ALLOWED.value(), req.getRequestURI(), new Date());
+    ErrorDto errorDto = ErrorDto.builder()
+        .path(req.getRequestURI())
+        .status(HttpStatus.METHOD_NOT_ALLOWED.value())
+        .message(e.getMessage())
+        .build();
 
     return new ResponseEntity<ErrorDto>(errorDto, HttpStatus.METHOD_NOT_ALLOWED);
   }
@@ -57,7 +70,11 @@ public class ExceptionControllerAdvice {
   public ResponseEntity<ErrorDto> handlerHttpMediaTypeNotSupportedException(HttpServletRequest req,
       HttpMediaTypeNotSupportedException e) {
 
-    ErrorDto errorDto = new ErrorDto(e.getMessage(), HttpStatus.NOT_ACCEPTABLE.value(), req.getRequestURI(), new Date());
+    ErrorDto errorDto = ErrorDto.builder()
+        .path(req.getRequestURI())
+        .status(HttpStatus.NOT_ACCEPTABLE.value())
+        .message(e.getMessage())
+        .build();
 
     return new ResponseEntity<ErrorDto>(errorDto, HttpStatus.NOT_ACCEPTABLE);
   }
@@ -66,7 +83,11 @@ public class ExceptionControllerAdvice {
   public ResponseEntity<ErrorDto> handlerException(HttpServletRequest req,Exception e) {
     e.printStackTrace();
 
-    ErrorDto errorDto = new ErrorDto(e.getMessage(), HttpStatus.INTERNAL_SERVER_ERROR.value(), req.getRequestURI(), new Date());
+    ErrorDto errorDto = ErrorDto.builder()
+        .path(req.getRequestURI())
+        .status(HttpStatus.INTERNAL_SERVER_ERROR.value())
+        .message(e.getMessage())
+        .build();
 
     return new ResponseEntity<ErrorDto>(errorDto, HttpStatus.INTERNAL_SERVER_ERROR);
   }
