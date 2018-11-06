@@ -2,7 +2,6 @@ package kr.co.pjm.diving.service.service.impl;
 
 import java.util.Date;
 
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Service;
@@ -23,13 +22,14 @@ import kr.co.pjm.diving.common.repository.DiveLogRepository;
 import kr.co.pjm.diving.common.util.DateUtil;
 import kr.co.pjm.diving.service.domain.dto.DiveLogDto;
 import kr.co.pjm.diving.service.service.DiveLogService;
+import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 
 @Slf4j
+@AllArgsConstructor
 @Service
 public class DiveLogServiceImpl implements DiveLogService {
   
-  @Autowired
   private DiveLogRepository diveLogRepository;
   
   @Override

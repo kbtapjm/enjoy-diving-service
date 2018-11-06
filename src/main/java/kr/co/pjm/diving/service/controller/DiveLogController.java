@@ -28,17 +28,18 @@ import kr.co.pjm.diving.common.domain.dto.SearchDto;
 import kr.co.pjm.diving.common.domain.entity.DiveLog;
 import kr.co.pjm.diving.service.domain.dto.DiveLogDto;
 import kr.co.pjm.diving.service.service.DiveLogService;
+import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 
 @Api(value = "DiveLogController", description = "다이브 로그 API")
 @Slf4j
+@AllArgsConstructor
 @RestController
 @RequestMapping(value = DiveLogController.RESOURCE_PATH)
 public class DiveLogController {
 
   static final String RESOURCE_PATH = "/{version}/divelogs";
 
-  @Autowired
   private DiveLogService diveLogService;
   
   @ApiOperation(value = "다이브 로그 목록 조회 API")

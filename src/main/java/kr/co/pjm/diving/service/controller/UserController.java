@@ -24,16 +24,17 @@ import kr.co.pjm.diving.common.domain.dto.SearchDto;
 import kr.co.pjm.diving.common.domain.entity.User;
 import kr.co.pjm.diving.service.domain.dto.UserDto;
 import kr.co.pjm.diving.service.service.UserService;
+import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 
 @Slf4j
+@AllArgsConstructor
 @RestController
 @RequestMapping(value = UserController.RESOURCE_PATH)
 public class UserController {
 
   static final String RESOURCE_PATH = "/{version}/users";
 
-  @Autowired
   private UserService userService;
   
   @GetMapping(produces = MediaType.APPLICATION_JSON_VALUE)

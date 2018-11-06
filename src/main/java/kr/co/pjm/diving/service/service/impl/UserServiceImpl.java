@@ -37,28 +37,24 @@ import kr.co.pjm.diving.common.repository.UserDiveRepository;
 import kr.co.pjm.diving.common.repository.UserRepository;
 import kr.co.pjm.diving.service.domain.dto.UserDto;
 import kr.co.pjm.diving.service.service.UserService;
+import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 
 @Slf4j
+@AllArgsConstructor
 @Service
 public class UserServiceImpl implements UserService {
   
-  @Autowired
   private UserRepository userRepository;
   
-  @Autowired
   private UserBasicRepository userBasicRepository;
   
-  @Autowired
   private UserDiveRepository userDiveRepository;
   
-  @Autowired
   private RoleRepository roleRepository;
 
-  @Autowired
   private UserConnectionRepasitory userConnectionRepasitory;
   
-  @Autowired
   private PasswordEncoder passwordEncoder;
   
   @Override
