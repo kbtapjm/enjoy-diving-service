@@ -1,11 +1,10 @@
 package kr.co.pjm.diving.service.domain.dto;
 
-import java.util.Date;
+import java.time.LocalDate;
 
 import javax.persistence.EnumType;
 import javax.persistence.Enumerated;
 import javax.validation.constraints.NotNull;
-import javax.validation.constraints.Past;
 
 import org.hibernate.validator.constraints.NotEmpty;
 import org.springframework.format.annotation.DateTimeFormat;
@@ -35,9 +34,9 @@ public class DiveLogDto extends CommonDto {
   private String diveNo;
   
   @ApiModelProperty(notes = "다이브 날짜", example = "yyyy-MM-dd", required = true, position = 1)
-  @Past
-  @DateTimeFormat(pattern="yyyy-MM-dd")
-  private Date diveDate;
+  @NotNull(message = "{message.diveLog.diveDate.notEmpty}")
+  @DateTimeFormat(pattern = "yyyy-MM-dd")
+  private LocalDate diveDate;
   
   @ApiModelProperty(notes = "다이브 장소", example = "Raja Ampat", required = true, position = 2)
   @NotEmpty(message = "{message.diveLog.divePlace.notEmpty}")

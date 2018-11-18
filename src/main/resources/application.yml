@@ -26,7 +26,7 @@ management:
   security:
     enabled: false
   context-path: /application
-  port: 9090
+  port: 9091
 
 endpoints:
   sensitive: false 
