@@ -1,6 +1,6 @@
 package kr.co.pjm.diving.service.service.impl;
 
-import java.util.Date;
+import java.time.LocalDateTime;
 
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
@@ -19,7 +19,6 @@ import kr.co.pjm.diving.common.domain.entity.QDiveLog;
 import kr.co.pjm.diving.common.domain.enumeration.DiveTypeEnum;
 import kr.co.pjm.diving.common.exception.ResourceNotFoundException;
 import kr.co.pjm.diving.common.repository.DiveLogRepository;
-import kr.co.pjm.diving.common.util.DateUtil;
 import kr.co.pjm.diving.service.domain.dto.DiveLogDto;
 import kr.co.pjm.diving.service.service.DiveLogService;
 import lombok.AllArgsConstructor;
@@ -63,7 +62,7 @@ public class DiveLogServiceImpl implements DiveLogService {
     for (SearchQ searchQ : searchDto.getQList()) {
       switch (searchQ.getSearchColumn()) {
       case "diveDate":
-        booleanBuilder.and(qDiveLog.diveDate.eq(DateUtil.getInstance().toDate(searchQ.getSearchValue(), DateUtil.FORMAT_YYYY_MM_DD)));
+        //booleanBuilder.and(qDiveLog.diveDate.eq(DateUtil.getInstance().toDate(searchQ.getSearchValue(), DateUtil.FORMAT_YYYY_MM_DD)));
         break;
       case "divePlace":
         booleanBuilder.and(qDiveLog.divePlace.like("%".concat(searchQ.getSearchValue()).concat("%")));
@@ -119,7 +118,7 @@ public class DiveLogServiceImpl implements DiveLogService {
     diveLog.setDiveCurrent(diveLogDto.getDiveCurrent());
     diveLog.setDiveActivity(diveLogDto.getDiveActivity());
     diveLog.setDiveNote(diveLogDto.getDiveNote());
-    diveLog.setRegDate(new Date());
+    diveLog.setRegDate(LocalDateTime.now());
     diveLog.setRegId(diveLogDto.getRegId());
     
     return diveLogRepository.save(diveLog);
@@ -175,7 +174,7 @@ public class DiveLogServiceImpl implements DiveLogService {
     diveLog.setDiveCurrent(diveLogDto.getDiveCurrent());
     diveLog.setDiveActivity(diveLogDto.getDiveActivity());
     diveLog.setDiveNote(diveLogDto.getDiveNote());
-    diveLog.setUpdateDate(new Date());
+    diveLog.setUpdateDate(LocalDateTime.now());
     diveLog.setUpdateId(diveLogDto.getUpdateId());
     
     diveLogRepository.save(diveLog);

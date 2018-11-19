@@ -5,6 +5,8 @@ jar {
     version = '0.0.1-SNAPSHOT'
 }
 
+ext['hibernate.version'] = '5.2.11.Final'
+
 dependencies {
     ext {
         springBootVersion = '1.5.2.RELEASE'

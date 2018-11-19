@@ -3,8 +3,6 @@ package kr.co.pjm.diving.service.controller;
 import javax.servlet.http.HttpServletRequest;
 import javax.validation.Valid;
 
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
@@ -84,7 +82,7 @@ public class UserController {
     
     userService.delete(id);
 
-    return new ResponseEntity<User>(HttpStatus.NO_CONTENT);
+    return ResponseEntity.noContent().build();
   }
   
   @PutMapping(value = "/{id}/loginDate", consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)

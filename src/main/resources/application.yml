@@ -16,18 +16,15 @@ spring:
     active: dev
   http:
     encoding:
-      charset: UTF-8
-       
+      charset: UTF-8    
 security:
   basic:
     enabled: false
-
 management:
   security:
     enabled: false
   context-path: /application
   port: 9091
-
 endpoints:
   sensitive: false 
   beans:
@@ -76,18 +73,20 @@ spring:
     driver-class-name: com.mysql.jdbc.Driver
     sql-script-encoding: UTF-8
     #schema: classpath:database/sql/ddl-*.sql
-    #data: classpath:database/sql/dml-*.sql
+    data: classpath:database/sql/dml-*.sql
   jpa:
     database: mysql
     show-sql: true
     hibernate:
-      ddl-auto: update
+      ddl-auto: create
+    
     properties:
       hibernate:
         show_sql: true
         format_sql: true
         use_sql_comments: true
-      
+        dialect: org.hibernate.dialect.MySQL5InnoDBDialect
+         
 logging:
   level:
     root: DEBUG 
