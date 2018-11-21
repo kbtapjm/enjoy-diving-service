@@ -82,46 +82,9 @@ public class DiveLogServiceImpl implements DiveLogService {
   @Transactional
   @Override
   public DiveLog set(DiveLogDto diveLogDto) {
-    DiveLog diveLog = new DiveLog();
-    diveLog.setDiveNo(Long.valueOf(diveLogDto.getDiveNo()));
-    diveLog.setDiveDate(diveLogDto.getDiveDate());
-    diveLog.setDivePlace(diveLogDto.getDivePlace());
-    diveLog.setDivePoint(diveLogDto.getDivePoint());
-    diveLog.setDiveInHour(diveLogDto.getDiveInHour());
-    diveLog.setDiveInMinute(diveLogDto.getDiveInMinute());
-    diveLog.setDiveOutHour(diveLogDto.getDiveOutHour());
-    diveLog.setDiveOutMinute(diveLogDto.getDiveOutMinute());
-    diveLog.setDiveTankStart(diveLogDto.getDiveTankEnd());
-    diveLog.setDiveTankEnd(diveLogDto.getDiveTankEnd());
-    diveLog.setGroundRestHour(diveLogDto.getGroundRestMinute());
-    diveLog.setGroundRestMinute(diveLogDto.getGroundRestMinute());
-    diveLog.setMaxDepth(diveLogDto.getMaxDepth());
-    diveLog.setAvgDepth(diveLogDto.getAvgDepth());
-    diveLog.setDiveTime(diveLogDto.getDiveTime());
-    diveLog.setDiveSafetyTime(diveLogDto.getDiveSafetyTime());
-    diveLog.setDivePlanTool(diveLogDto.getDivePlanTool());
-    diveLog.setDivePlanWeight(diveLogDto.getDivePlanWeight());
-    diveLog.setDivePlanEanx(diveLogDto.getDivePlanEanx());
-    diveLog.setDivePlanExrPtn(diveLogDto.getDivePlanExrPtn());
-    diveLog.setDivePlanHoodYn(diveLogDto.getDivePlanHoodYn());
-    diveLog.setDivePlanGlovesYn(diveLogDto.getDivePlanGlovesYn());
-    diveLog.setDivePlanBootsYn(diveLogDto.getDivePlanBootsYn());
-    diveLog.setDivePlanLightYn(diveLogDto.getDivePlanLightYn());
-    diveLog.setDivePlanSmbYn(diveLogDto.getDivePlanSmbYn());
-    diveLog.setDivePlanKnifeYn(diveLogDto.getDivePlanKnifeYn());
-    diveLog.setDivePlanCameraYn(diveLogDto.getDivePlanCameraYn());
-    diveLog.setVisibility(diveLogDto.getVisibility());
-    diveLog.setTemperature(diveLogDto.getTemperature());
-    diveLog.setDiveType(diveLogDto.getDiveType());
-    diveLog.setDiveWater(diveLogDto.getDiveWater());
-    diveLog.setDiveWave(diveLogDto.getDiveWave());
-    diveLog.setDiveCurrent(diveLogDto.getDiveCurrent());
-    diveLog.setDiveActivity(diveLogDto.getDiveActivity());
-    diveLog.setDiveNote(diveLogDto.getDiveNote());
-    diveLog.setRegDate(LocalDateTime.now());
-    diveLog.setRegId(diveLogDto.getRegId());
+    diveLogDto.setRegDate(LocalDateTime.now());
     
-    return diveLogRepository.save(diveLog);
+    return diveLogRepository.save(diveLogDto.toEntity());
   }
 
   @Override
@@ -137,47 +100,10 @@ public class DiveLogServiceImpl implements DiveLogService {
   @Transactional
   @Override
   public void update(Long id, DiveLogDto diveLogDto) {
-    DiveLog diveLog = new DiveLog();
-    diveLog.setId(id);
-    diveLog.setDiveNo(Long.valueOf(diveLogDto.getDiveNo()));
-    diveLog.setDiveDate(diveLogDto.getDiveDate());
-    diveLog.setDivePlace(diveLogDto.getDivePlace());
-    diveLog.setDivePoint(diveLogDto.getDivePoint());
-    diveLog.setDiveInHour(diveLogDto.getDiveInHour());
-    diveLog.setDiveInMinute(diveLogDto.getDiveInMinute());
-    diveLog.setDiveOutHour(diveLogDto.getDiveOutHour());
-    diveLog.setDiveOutMinute(diveLogDto.getDiveOutMinute());
-    diveLog.setDiveTankStart(diveLogDto.getDiveTankEnd());
-    diveLog.setDiveTankEnd(diveLogDto.getDiveTankEnd());
-    diveLog.setGroundRestHour(diveLogDto.getGroundRestMinute());
-    diveLog.setGroundRestMinute(diveLogDto.getGroundRestMinute());
-    diveLog.setMaxDepth(diveLogDto.getMaxDepth());
-    diveLog.setAvgDepth(diveLogDto.getAvgDepth());
-    diveLog.setDiveTime(diveLogDto.getDiveTime());
-    diveLog.setDiveSafetyTime(diveLogDto.getDiveSafetyTime());
-    diveLog.setDivePlanTool(diveLogDto.getDivePlanTool());
-    diveLog.setDivePlanWeight(diveLogDto.getDivePlanWeight());
-    diveLog.setDivePlanEanx(diveLogDto.getDivePlanEanx());
-    diveLog.setDivePlanExrPtn(diveLogDto.getDivePlanExrPtn());
-    diveLog.setDivePlanHoodYn(diveLogDto.getDivePlanHoodYn());
-    diveLog.setDivePlanGlovesYn(diveLogDto.getDivePlanGlovesYn());
-    diveLog.setDivePlanBootsYn(diveLogDto.getDivePlanBootsYn());
-    diveLog.setDivePlanLightYn(diveLogDto.getDivePlanLightYn());
-    diveLog.setDivePlanSmbYn(diveLogDto.getDivePlanSmbYn());
-    diveLog.setDivePlanKnifeYn(diveLogDto.getDivePlanKnifeYn());
-    diveLog.setDivePlanCameraYn(diveLogDto.getDivePlanCameraYn());
-    diveLog.setVisibility(diveLogDto.getVisibility());
-    diveLog.setTemperature(diveLogDto.getTemperature());
-    diveLog.setDiveType(diveLogDto.getDiveType());
-    diveLog.setDiveWater(diveLogDto.getDiveWater());
-    diveLog.setDiveWave(diveLogDto.getDiveWave());
-    diveLog.setDiveCurrent(diveLogDto.getDiveCurrent());
-    diveLog.setDiveActivity(diveLogDto.getDiveActivity());
-    diveLog.setDiveNote(diveLogDto.getDiveNote());
-    diveLog.setUpdateDate(LocalDateTime.now());
-    diveLog.setUpdateId(diveLogDto.getUpdateId());
+    diveLogDto.setId(id);
+    diveLogDto.setUpdateDate(LocalDateTime.now());
     
-    diveLogRepository.save(diveLog);
+    diveLogRepository.save(diveLogDto.toEntity());
   }
 
   @Transactional

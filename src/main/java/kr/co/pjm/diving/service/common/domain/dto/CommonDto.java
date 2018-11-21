@@ -1,6 +1,6 @@
 package kr.co.pjm.diving.service.common.domain.dto;
 
-import java.util.Date;
+import java.time.LocalDateTime;
 
 import org.apache.commons.lang3.builder.ToStringBuilder;
 import org.apache.commons.lang3.builder.ToStringStyle;
@@ -18,10 +18,10 @@ public abstract class CommonDto {
   private String updateId;
   
   @JsonIgnore
-  private Date regDate;
+  private LocalDateTime regDate;
   
   @JsonIgnore
-  private Date updateDate;
+  private LocalDateTime updateDate;
   
   @Override
   public String toString() {

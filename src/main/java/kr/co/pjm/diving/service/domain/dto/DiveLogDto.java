@@ -11,6 +11,7 @@ import org.springframework.format.annotation.DateTimeFormat;
 
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
+import kr.co.pjm.diving.common.domain.entity.DiveLog;
 import kr.co.pjm.diving.common.domain.enumeration.DiveCurrentEnum;
 import kr.co.pjm.diving.common.domain.enumeration.DivePlanExrPtnEnum;
 import kr.co.pjm.diving.common.domain.enumeration.DivePlanToolEnum;
@@ -23,11 +24,13 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
+@NoArgsConstructor
 @Getter
 @Setter
-@NoArgsConstructor
 @ApiModel(description = "다이브 로그 DTO")
 public class DiveLogDto extends CommonDto {
+  
+  private Long id;
   
   @ApiModelProperty(notes = "다이브 로그 번호", example = "1", required = true, position = 0)
   @NotEmpty(message = "{message.diveLog.diveNo.notEmpty}")
@@ -165,5 +168,50 @@ public class DiveLogDto extends CommonDto {
   
   @ApiModelProperty(notes = "다이브 노트", example = "라자암팟 최고의 포인트", required = false, position = 34)
   private String diveNote;
+  
+  public DiveLog toEntity() {
+    return DiveLog.builder()
+        .id(id)
+        .diveNo(Long.valueOf(diveNo))
+        .diveDate(diveDate)
+        .divePlace(divePlace)
+        .divePoint(divePoint)
+        .diveInHour(diveInHour)
+        .diveInMinute(diveInMinute)
+        .diveOutHour(diveOutHour)
+        .diveOutMinute(diveOutMinute)
+        .diveTankStart(diveTankStart)
+        .diveTankEnd(diveTankEnd)
+        .groundRestHour(groundRestHour)
+        .groundRestMinute(groundRestMinute)
+        .maxDepth(maxDepth)
+        .avgDepth(avgDepth)
+        .diveTime(diveTime)
+        .diveSafetyTime(diveSafetyTime)
+        .divePlanTool(divePlanTool)
+        .divePlanWeight(divePlanWeight)
+        .divePlanEanx(divePlanEanx)
+        .divePlanExrPtn(divePlanExrPtn)
+        .divePlanHoodYn(divePlanHoodYn)
+        .divePlanGlovesYn(divePlanGlovesYn)
+        .divePlanBootsYn(divePlanBootsYn)
+        .divePlanLightYn(divePlanLightYn)
+        .divePlanSmbYn(divePlanSmbYn)
+        .divePlanKnifeYn(divePlanKnifeYn)
+        .divePlanCameraYn(divePlanCameraYn)
+        .visibility(visibility)
+        .temperature(temperature)
+        .diveType(diveType)
+        .diveWater(diveWater)
+        .diveWave(diveWave)
+        .diveCurrent(diveCurrent)
+        .diveActivity(diveActivity)
+        .diveNote(diveNote)
+        .regId(this.getRegId())
+        .updateId(this.getUpdateId())
+        .regDate(this.getRegDate())
+        .updateDate(this.getUpdateDate())
+        .build();
+  }
 
 }
