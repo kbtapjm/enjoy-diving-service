@@ -85,7 +85,7 @@ public class UserController {
     return ResponseEntity.noContent().build();
   }
   
-  @PutMapping(value = "/{id}/loginDate", consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
+  @PutMapping(value = "/{id}/login_date", consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
   public ResponseEntity<?> updateUserLoginDate(@PathVariable("id") Long id)
       throws Exception {
     

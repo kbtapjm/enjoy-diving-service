@@ -11,13 +11,13 @@ public interface UserService {
   
   List<User> getUsers(SearchDto searchDto, PagingDto pagingDto);
   
-  User set(UserDto.Create userCreate);
+  User set(UserDto.Create dto);
   
   User getById(Long id);
   
   User getByEmail(String email);
   
-  void update(Long id, UserDto.Update update);
+  void update(Long id, UserDto.Update dto);
   
   void delete(Long id);
   

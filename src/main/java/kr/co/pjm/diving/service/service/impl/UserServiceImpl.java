@@ -1,5 +1,7 @@
 package kr.co.pjm.diving.service.service.impl;
 
+import java.util.Arrays;
+import java.util.HashSet;
 import java.util.List;
 
 import org.apache.commons.lang3.StringUtils;
@@ -16,8 +18,6 @@ import kr.co.pjm.diving.common.domain.dto.PagingDto;
 import kr.co.pjm.diving.common.domain.dto.ResourcesDto;
 import kr.co.pjm.diving.common.domain.dto.SearchDto;
 import kr.co.pjm.diving.common.domain.dto.SearchDto.SearchQ;
-import kr.co.pjm.diving.common.domain.dto.UserBasicDto;
-import kr.co.pjm.diving.common.domain.dto.UserDiveDto;
 import kr.co.pjm.diving.common.domain.entity.QUser;
 import kr.co.pjm.diving.common.domain.entity.QUserBasic;
 import kr.co.pjm.diving.common.domain.entity.Role;
@@ -102,44 +102,46 @@ public class UserServiceImpl implements UserService {
 
   @Override
   @Transactional
-  public User set(UserDto.Create create) {
-    User user = new User();
-    user.setEmail(create.getEmail());
-    user.setPassword(passwordEncoder.encode(create.getPassword()));
-    
+  public User set(UserDto.Create dto) {
     /* user basic create */
-    UserBasic userBasic = new UserBasic();
-    userBasic.setName(create.getName());
-    userBasic.setNickname(create.getNickname());
-    userBasic.setGender(create.getGender());
-    userBasic.setCountry(create.getCountry());
-    userBasic.setStatus(UserStatusEnum.NORMAL);
+    UserBasic userBasic = UserBasic.builder()
+        .name(dto.getName())
+        .nickname(dto.getNickname())
+        .gender(dto.getGender())
+        .country(dto.getCountry())
+        .status(UserStatusEnum.NORMAL)
+        .build();
     
     userBasicRepository.save(userBasic);
     
-    user.setUserBasic(userBasic);
-    
     /* user dive create */
-    UserDive userDive = new UserDive();
-    userDive.setDiveLevel(StringUtils.EMPTY);
-    userDive.setDiveGroup(StringUtils.EMPTY);
-    userDive.setTeam(StringUtils.EMPTY);
-    userDive.setSignature(StringUtils.EMPTY);
+    UserDive userDive = UserDive.builder()
+        .diveLevel(StringUtils.EMPTY)
+        .diveGroup(StringUtils.EMPTY)
+        .team(StringUtils.EMPTY)
+        .signature(StringUtils.EMPTY)
+        .build();
     
     userDiveRepository.save(userDive);
-    
-    user.setUserDive(userDive);
-    
+        
     /* get role */
     Role role = roleRepository.findByRole(RoleTypeEnum.USER);
     
-    UserRole userRole = new UserRole();
-    userRole.setUser(user);
-    userRole.setRole(role);
+    User user = User.builder()
+        .email(dto.getEmail())
+        .password(passwordEncoder.encode(dto.getPassword()))
+        .userBasic(userBasic)
+        .userDive(userDive)
+        .build();
     
-    user.getUserRoles().add(userRole);
+    UserRole userRole = UserRole.builder()
+        .role(role)
+        .user(user)
+        .build();
     
-    /* user create */
+    /* user_role, user create */
+    user.setUserRoles(new HashSet<UserRole>(Arrays.asList(userRole)));
+    
     User retUser = userRepository.save(user);
     
     return retUser;
@@ -167,28 +169,30 @@ public class UserServiceImpl implements UserService {
 
   @Override
   @Transactional
-  public void update(Long id, UserDto.Update update) {
+  public void update(Long id, UserDto.Update dto) {
     /* user basic update */
-    UserBasicDto userBasicDto = new UserBasicDto();
-    userBasicDto.setId(id);
-    userBasicDto.setName(update.getName());
-    userBasicDto.setNickname(update.getNickname());
-    userBasicDto.setCountry(update.getCountry());
-    userBasicDto.setGender(update.getGender());
-    userBasicDto.setIntroduce(update.getIntroduce());
+    UserBasic userBasic = UserBasic.builder()
+        .id(id)
+        .name(dto.getName())
+        .nickname(dto.getNickname())
+        .country(dto.getCountry())
+        .gender(dto.getGender())
+        .introduce(dto.getIntroduce())
+        .build();
     
-    Long updateUserBasic = userBasicRepository.updateUserBasic(userBasicDto);
+    Long updateUserBasic = userBasicRepository.updateUserBasic(userBasic);
     log.debug("===> update updateUserBasic : {}", updateUserBasic);
     
     /* user dive update */
-    UserDiveDto userDiveDto = new UserDiveDto();
-    userDiveDto.setId(id);
-    userDiveDto.setDiveGroup( update.getDiveGroup());
-    userDiveDto.setDiveLevel( update.getDiveLevel());
-    userDiveDto.setTeam( update.getTeam());
-    userDiveDto.setSignature( update.getSignature());
+    UserDive userDive = UserDive.builder()
+        .id(id)
+        .diveGroup(dto.getDiveGroup())
+        .diveLevel(dto.getDiveLevel())
+        .team(dto.getTeam())
+        .signature(dto.getSignature())
+        .build();
     
-    Long updateUserDive = userDiveRepository.updateUserDive(userDiveDto);
+    Long updateUserDive = userDiveRepository.updateUserDive(userDive);
     log.debug("===> update updateUserDive : {}", updateUserDive);
   }
 
@@ -209,10 +213,9 @@ public class UserServiceImpl implements UserService {
   @Override
   @Transactional
   public void updateLoginDate(Long id) {
-    UserBasicDto userBasicDto = new UserBasicDto();
-    userBasicDto.setId(id);
+    UserBasic userBasic = UserBasic.builder().id(id).build();
     
-    userBasicRepository.updateLoginDate(userBasicDto);
+    userBasicRepository.updateLoginDate(userBasic);
   }
 
 }
