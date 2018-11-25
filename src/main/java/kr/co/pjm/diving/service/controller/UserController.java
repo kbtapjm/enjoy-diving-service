@@ -94,6 +94,13 @@ public class UserController {
     return ResponseEntity.ok(userService.getById(id));
   }
   
+  @GetMapping(value = "/{email}/email", produces = MediaType.APPLICATION_JSON_VALUE)
+  public ResponseEntity<?> getUserByEmail(@PathVariable("email") String email)
+      throws Exception {
+    
+    return ResponseEntity.ok(userService.getByEmail(email));
+  }
+  
   /*@GetMapping(value = "/{id}", produces = MediaType.APPLICATION_JSON_VALUE)
   public Resource<User> getUser(@PathVariable("version") String version, @PathVariable("id") Long id)
       throws Exception {
