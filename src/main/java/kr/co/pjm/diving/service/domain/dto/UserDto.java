@@ -45,6 +45,8 @@ public class UserDto {
 
     @NotEmpty(message = "{message.user.country.notEmpty}")
     private String country;
+    
+    private String provider;
 
     @JsonIgnore
     @Enumerated(EnumType.ORDINAL)

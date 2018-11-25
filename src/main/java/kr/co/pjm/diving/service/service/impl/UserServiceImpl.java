@@ -132,6 +132,7 @@ public class UserServiceImpl implements UserService {
         .password(passwordEncoder.encode(dto.getPassword()))
         .userBasic(userBasic)
         .userDive(userDive)
+        .provider(dto.getProvider())
         .build();
     
     UserRole userRole = UserRole.builder()
