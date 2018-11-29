@@ -22,5 +22,7 @@ public interface UserService {
   void delete(Long id);
   
   void updateLoginDate(Long id);
+  
+  void updatePassword(Long id, UserDto.Password dto);
 
 }

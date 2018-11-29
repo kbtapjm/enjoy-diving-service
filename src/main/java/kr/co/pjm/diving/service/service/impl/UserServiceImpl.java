@@ -5,6 +5,7 @@ import java.util.HashSet;
 import java.util.List;
 
 import org.apache.commons.lang3.StringUtils;
+import org.springframework.context.support.MessageSourceAccessor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.security.crypto.password.PasswordEncoder;
@@ -28,6 +29,7 @@ import kr.co.pjm.diving.common.domain.entity.UserRole;
 import kr.co.pjm.diving.common.domain.enumeration.GenderEnum;
 import kr.co.pjm.diving.common.domain.enumeration.RoleTypeEnum;
 import kr.co.pjm.diving.common.domain.enumeration.UserStatusEnum;
+import kr.co.pjm.diving.common.exception.InvalidRequestException;
 import kr.co.pjm.diving.common.exception.ResourceNotFoundException;
 import kr.co.pjm.diving.common.repository.RoleRepository;
 import kr.co.pjm.diving.common.repository.UserBasicRepository;
@@ -55,6 +57,8 @@ public class UserServiceImpl implements UserService {
   private UserConnectionRepasitory userConnectionRepasitory;
   
   private PasswordEncoder passwordEncoder;
+  
+  private MessageSourceAccessor messageSourceAccessor;
   
   @Override
   public List<User> getUsers(SearchDto searchDto, PagingDto pagingDto) {
@@ -219,4 +223,21 @@ public class UserServiceImpl implements UserService {
     userBasicRepository.updateLoginDate(userBasic);
   }
 
+  @Override
+  @Transactional
+  public void updatePassword(Long id, UserDto.Password dto) {
+    User chkUser = userRepository.findOne(id);
+    
+    if (!passwordEncoder.matches(dto.getOldPassword(), chkUser.getPassword())) {
+      throw new InvalidRequestException(messageSourceAccessor.getMessage("message.user.password.notMatch"));
+    }
+    
+    User user = User.builder()
+        .id(id)
+        .password(passwordEncoder.encode(dto.getNewPassword()))
+        .build();
+    
+    userRepository.updatePassword(user);
+  }
+  
 }

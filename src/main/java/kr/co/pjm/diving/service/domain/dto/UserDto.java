@@ -85,5 +85,14 @@ public class UserDto {
     @JsonIgnore
     private Date loginDate;
   }
+  
+  @Getter
+  @Setter
+  public static class Password {
+    @NotEmpty(message = "{message.user.oldPassword.notEmpty}")
+    private String oldPassword;
+    @NotEmpty(message = "{message.user.newPassword.notEmpty}")
+    private String newPassword;
+  }
 
 }
