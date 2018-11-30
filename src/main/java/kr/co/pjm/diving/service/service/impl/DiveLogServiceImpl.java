@@ -112,4 +112,10 @@ public class DiveLogServiceImpl implements DiveLogService {
     diveLogRepository.delete(id);
   }
 
+  @Transactional
+  @Override
+  public void deleteByUser(String userId) {
+    diveLogRepository.deleteByUser(userId);
+  }
+
 }

@@ -17,4 +17,6 @@ public interface DiveLogService {
   void update(Long id, DiveLogDto diveLogDto);
   
   void delete(Long id);
+  
+  void deleteByUser(String userId);
 }

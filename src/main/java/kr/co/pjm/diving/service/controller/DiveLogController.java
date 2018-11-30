@@ -25,6 +25,7 @@ import io.swagger.annotations.ApiOperation;
 import kr.co.pjm.diving.common.domain.dto.PagingDto;
 import kr.co.pjm.diving.common.domain.dto.SearchDto;
 import kr.co.pjm.diving.common.domain.entity.DiveLog;
+import kr.co.pjm.diving.common.util.StringUtil;
 import kr.co.pjm.diving.service.domain.dto.DiveLogDto;
 import kr.co.pjm.diving.service.service.DiveLogService;
 import lombok.AllArgsConstructor;
@@ -107,6 +108,19 @@ public class DiveLogController {
       throws Exception {
     
     diveLogService.delete(id);
+
+    return new ResponseEntity<DiveLog>(HttpStatus.NO_CONTENT);
+  }
+  
+  @ApiOperation(value = "다이브 로그 전체 삭제 API")
+  @ApiImplicitParams({
+    @ApiImplicitParam(name = "userId", value = "유저 아이디", required = true, dataType = "int", paramType = "path", defaultValue = ""),
+  })
+  @DeleteMapping(value = "/{userId}/user", produces = MediaType.APPLICATION_JSON_VALUE)
+  public ResponseEntity<?> deleteDiveLogByUser(@PathVariable("userId") Long userId)
+      throws Exception {
+    
+    diveLogService.deleteByUser(StringUtil.getInstance().isString(userId));
 
     return new ResponseEntity<DiveLog>(HttpStatus.NO_CONTENT);
   }
