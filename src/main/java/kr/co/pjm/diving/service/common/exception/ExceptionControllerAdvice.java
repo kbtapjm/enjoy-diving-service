@@ -16,6 +16,7 @@ import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.RestController;
 
 import kr.co.pjm.diving.common.domain.dto.ErrorDto;
+import kr.co.pjm.diving.common.exception.InvalidRequestException;
 import kr.co.pjm.diving.common.exception.ResourceNotFoundException;
 import lombok.extern.slf4j.Slf4j;
 
@@ -39,6 +40,17 @@ public class ExceptionControllerAdvice {
         .message(errors.toString())
         .build();
     
+    return new ResponseEntity<ErrorDto>(errorDto, HttpStatus.BAD_REQUEST);
+  }
+  
+  @ExceptionHandler(value = InvalidRequestException.class)
+  public ResponseEntity<ErrorDto> handlerInvalidRequestException(HttpServletRequest req, InvalidRequestException e) {
+    ErrorDto errorDto = ErrorDto.builder()
+        .path(req.getRequestURI())
+        .status(HttpStatus.BAD_REQUEST.value())
+        .message(e.getMessage())
+        .build();
+
     return new ResponseEntity<ErrorDto>(errorDto, HttpStatus.BAD_REQUEST);
   }
 
