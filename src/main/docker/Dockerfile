@@ -1,4 +1,4 @@
-FROM frolvlad/alpine-oraclejdk8
+FROM java:8
 ENV SPRING_ACTIVE_PROFILE stg
 ENV JAVA_OPTS=""
 VOLUME /tmp
