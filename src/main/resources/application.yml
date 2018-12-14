@@ -103,18 +103,18 @@ props:
 spring:
   profiles: stg
   datasource:
-    url: ENC(MRQFh4k0JQQixXrB5SXzyJ6t0lvaGKC1cGxefwHSwAfa2FhGxkCZnsnOK4SS2a236DJbn3B891Z4ewsqMC/DF1hKRC4oq/Uu4GsyI/fa02jJoNZqOY8/KNZ8ZDfTMrWOLbOKGmYXGhQ=)
+    url: ENC(cfW7TvnQciD2KkBl35cty1vUKNw0FrSGi343dUOF2Nx9FrGx1GlRAU7XVC+GWR3+)
     username: ENC(jauxnix93NIxNidJQpxZGQ==)
     password: ENC(Jbk2+ry3C3T9suJEsBqWow==)
     driver-class-name: com.mysql.jdbc.Driver
     sql-script-encoding: UTF-8
     #schema: classpath:database/sql/ddl-*.sql
-    data: classpath:database/sql/dml-*.sql
+    #data: classpath:database/sql/dml-*.sql
   jpa:
     database: mysql
     show-sql: true
     hibernate:
-      ddl-auto: update
+      ddl-auto: upate
     properties:
       hibernate:
         show_sql: true
@@ -124,7 +124,7 @@ spring:
       
 logging:
   level:
-    root: DEBUG 
+    root: INFO 
     org.apache: INFO
   config: classpath:config/logback-spring.xml
   file : local
