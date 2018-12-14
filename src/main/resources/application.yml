@@ -103,7 +103,7 @@ props:
 spring:
   profiles: stg
   datasource:
-    url: ENC(cfW7TvnQciD2KkBl35cty1vUKNw0FrSGi343dUOF2Nx9FrGx1GlRAU7XVC+GWR3+)
+    url: ENC(MRQFh4k0JQQixXrB5SXzyJ6t0lvaGKC1cGxefwHSwAfa2FhGxkCZnsnOK4SS2a236DJbn3B891Z4ewsqMC/DF1hKRC4oq/Uu4GsyI/fa02jJoNZqOY8/KNZ8ZDfTMrWOLbOKGmYXGhQ=)
     username: ENC(jauxnix93NIxNidJQpxZGQ==)
     password: ENC(Jbk2+ry3C3T9suJEsBqWow==)
     driver-class-name: com.mysql.jdbc.Driver
