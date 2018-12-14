@@ -109,13 +109,12 @@ spring:
     driver-class-name: com.mysql.jdbc.Driver
     sql-script-encoding: UTF-8
     #schema: classpath:database/sql/ddl-*.sql
-    data: classpath:database/sql/dml-*.sql
-    initialize: true
+    #data: classpath:database/sql/dml-*.sql
   jpa:
     database: mysql
     show-sql: true
     hibernate:
-      ddl-auto: create
+      ddl-auto: upate
     properties:
       hibernate:
         show_sql: true
@@ -125,7 +124,7 @@ spring:
       
 logging:
   level:
-    root: INFO 
+    root: DEBUG 
     org.apache: INFO
   config: classpath:config/logback-spring.xml
   file : local
