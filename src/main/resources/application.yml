@@ -103,18 +103,18 @@ props:
 spring:
   profiles: stg
   datasource:
-    url: ENC(cfW7TvnQciD2KkBl35cty1vUKNw0FrSGi343dUOF2Nx9FrGx1GlRAU7XVC+GWR3+)
+    url: ENC(kznpt0fhOiHUAdxouQhXjKozJnIjVJOCDiMlL+1C0/veUosgPjXhKHICI5Gri/mf3awCB+lWOzD2YKp+/ghXQpbEejIWJUND0Dx5+ncrqDCO+TQ5wXr2Vg==)
     username: ENC(jauxnix93NIxNidJQpxZGQ==)
     password: ENC(Jbk2+ry3C3T9suJEsBqWow==)
     driver-class-name: com.mysql.jdbc.Driver
-    sql-script-encoding: UTF-8
+    #sql-script-encoding: UTF-8
     #schema: classpath:database/sql/ddl-*.sql
     data: classpath:database/sql/dml-*.sql
   jpa:
     database: mysql
     show-sql: true
     hibernate:
-      ddl-auto: update
+      ddl-auto: create
     properties:
       hibernate:
         show_sql: true
