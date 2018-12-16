@@ -107,7 +107,7 @@ spring:
     username: ENC(jauxnix93NIxNidJQpxZGQ==)
     password: ENC(Jbk2+ry3C3T9suJEsBqWow==)
     driver-class-name: com.mysql.jdbc.Driver
-    #sql-script-encoding: UTF-8
+    sql-script-encoding: UTF-8
     #schema: classpath:database/sql/ddl-*.sql
     data: classpath:database/sql/dml-*.sql
   jpa:
@@ -121,6 +121,10 @@ spring:
         format_sql: true
         use_sql_comments: true
         dialect: org.hibernate.dialect.MySQL5InnoDBDialect
+        connection:
+          characterEncoding: utf-8
+          CharSet: utf-8
+          useUnicode: true
       
 logging:
   level:
