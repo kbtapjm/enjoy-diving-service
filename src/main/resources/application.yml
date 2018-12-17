@@ -103,7 +103,7 @@ props:
 spring:
   profiles: stg
   datasource:
-    url: ENC(ddA9KNsKf6DLeLC1Yy+tbrjkJ5rVP65gkePqk5vx3wNgNkk05CUP3ZHDdI2ih4n/UWO/gylACuD8h/djztRculg6dAs+z5whdqG4x2M8ksI=)
+    url: ENC(emifSrvMjU8lObCZdDOAHJTGxu7HeQ2CfsLZO3A6ZUmQmXrxHQzqYEEwC8tI2m0z)
     username: ENC(jauxnix93NIxNidJQpxZGQ==)
     password: ENC(Jbk2+ry3C3T9suJEsBqWow==)
     driver-class-name: com.mysql.jdbc.Driver
@@ -121,14 +121,10 @@ spring:
         format_sql: true
         use_sql_comments: true
         dialect: org.hibernate.dialect.MySQL5InnoDBDialect
-        connection:
-          characterEncoding: utf-8
-          CharSet: utf-8
-          useUnicode: true
       
 logging:
   level:
-    root: DEBUG 
+    root: INFO 
     org.apache: INFO
   config: classpath:config/logback-spring.xml
   file : local
