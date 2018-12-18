@@ -90,7 +90,7 @@ logging:
     root: DEBUG 
     org.apache: INFO
   config: classpath:config/logback-spring.xml
-  file : local
+  file : dev
   path : data/logs
 
 props:
@@ -127,7 +127,7 @@ logging:
     root: INFO 
     org.apache: INFO
   config: classpath:config/logback-spring.xml
-  file : local
+  file : stg
   path : data/logs
   
 props:
