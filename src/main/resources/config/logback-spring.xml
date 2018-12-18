@@ -27,13 +27,6 @@
     <logger name="org.springframework" level="INFO"/>
     <logger name="org.hibernate" level="INFO"/>
     <logger name="jdbc.connection" level="INFO"/>
-
-    <springProfile name="prod">
-        <root level="ERROR">
-            <appender-ref ref="CONSOLE" />
-            <appender-ref ref="FILE" />
-        </root>
-    </springProfile>
     
     <springProfile name="stg">
         <root level="INFO">
