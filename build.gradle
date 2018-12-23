@@ -31,7 +31,7 @@ dependencies {
 
 task buildDocker(type: Docker, dependsOn: build) {
     push = true
-    applicationName = jar.baseName
+    applicationName = kbtapjm/jar.baseName
     dockerfile = file('src/main/docker/Dockerfile')
     doFirst {
         copy {
