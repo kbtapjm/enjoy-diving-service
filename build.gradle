@@ -30,7 +30,7 @@ dependencies {
 }
 
 task unpack(type: Copy) {
-    dependsOn bootJar
+    dependsOn jar
     from(zipTree(tasks.jar.outputs.files.singleFile))
     into("build/dependency")
 }
