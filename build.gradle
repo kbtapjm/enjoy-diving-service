@@ -31,7 +31,7 @@ dependencies {
 
 task buildDocker(type: Docker, dependsOn: build) {
     push = true
-    applicationName = 'kbtapjm/' + jar.baseName
+    applicationName = 'kbtapjm/enjoy-diving-service-0.0.1-SNAPSHOT.jar'
     dockerfile = file('src/main/docker/Dockerfile')
     doFirst {
         copy {
