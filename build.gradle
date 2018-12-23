@@ -36,7 +36,7 @@ task unpack(type: Copy) {
 }
 
 docker {
-    name 'kbtapjm/' + ${jar.baseName}"
+    name 'kbtapjm/' + ${jar.baseName}
     copySpec.from(tasks.unpack.outputs).into("dependency")
     buildArgs(['DEPENDENCY': "dependency"])
 }
