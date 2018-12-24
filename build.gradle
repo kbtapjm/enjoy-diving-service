@@ -29,21 +29,10 @@ dependencies {
     compile group: 'io.springfox', name: 'springfox-swagger-ui', version: '2.9.2'
 }
 
-task unpack(type: Copy) {
-    dependsOn jar
-    from(zipTree(tasks.jar.outputs.files.singleFile))
-    into("build/dependency")
-}
-
-docker {
-    name 'kbtapjm/' + ${jar.baseName}
-    copySpec.from(tasks.unpack.outputs).into("dependency")
-    buildArgs(['DEPENDENCY': "dependency"])
-}
-
 task buildDocker(type: Docker, dependsOn: build) {
     push = true
     applicationName = jar.baseName
+    tag = 'kbtapjm/enjoy-diving-service:${project.version}'
     dockerfile = file('src/main/docker/Dockerfile')
     doFirst {
         copy {
