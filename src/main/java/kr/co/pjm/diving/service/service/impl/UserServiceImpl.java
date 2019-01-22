@@ -37,6 +37,7 @@ import kr.co.pjm.diving.common.repository.UserConnectionRepasitory;
 import kr.co.pjm.diving.common.repository.UserDiveRepository;
 import kr.co.pjm.diving.common.repository.UserRepository;
 import kr.co.pjm.diving.service.domain.dto.UserDto;
+import kr.co.pjm.diving.service.domain.dto.UserDto.Status;
 import kr.co.pjm.diving.service.service.UserService;
 import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -238,6 +239,17 @@ public class UserServiceImpl implements UserService {
         .build();
     
     userRepository.updatePassword(user);
+  }
+
+  @Override
+  @Transactional
+  public void updateStatus(Long id, UserDto.Status dto) {
+    UserBasic userBasic = UserBasic.builder()
+        .id(id)
+        .status(dto.getStatus())
+        .build();
+    
+    userBasicRepository.updateUserBasic(userBasic);
   }
   
 }

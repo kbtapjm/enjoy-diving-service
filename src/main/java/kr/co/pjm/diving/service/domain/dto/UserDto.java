@@ -91,8 +91,17 @@ public class UserDto {
   public static class Password {
     @NotEmpty(message = "{message.user.oldPassword.notEmpty}")
     private String oldPassword;
+    
     @NotEmpty(message = "{message.user.newPassword.notEmpty}")
     private String newPassword;
+  }
+  
+  @Getter
+  @Setter
+  public static class Status {
+    @NotNull(message = "{message.user.status.notEmpty}")
+    @Enumerated(EnumType.ORDINAL)
+    private UserStatusEnum status;
   }
 
 }

@@ -24,5 +24,7 @@ public interface UserService {
   void updateLoginDate(Long id);
   
   void updatePassword(Long id, UserDto.Password dto);
+  
+  void updateStatus(Long id, UserDto.Status dto);
 
 }

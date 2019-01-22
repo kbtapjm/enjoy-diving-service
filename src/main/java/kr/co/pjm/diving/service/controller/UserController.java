@@ -109,6 +109,15 @@ public class UserController {
 
     return ResponseEntity.ok(userService.getById(id));
   }
+  
+  @PutMapping(value = "/{id}/status", consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
+  public ResponseEntity<?> updateUserStatus(@PathVariable("id") Long id, @Valid @RequestBody UserDto.Status dto)
+      throws Exception {
+    
+    userService.updateStatus(id, dto);
+
+    return ResponseEntity.ok().build();
+  }
 
   /*
    * hateoas source
