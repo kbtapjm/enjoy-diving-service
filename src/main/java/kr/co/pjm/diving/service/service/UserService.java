@@ -5,6 +5,7 @@ import java.util.List;
 import kr.co.pjm.diving.common.domain.dto.PagingDto;
 import kr.co.pjm.diving.common.domain.dto.SearchDto;
 import kr.co.pjm.diving.common.domain.entity.User;
+import kr.co.pjm.diving.common.domain.entity.UserLoginLog;
 import kr.co.pjm.diving.service.domain.dto.UserDto;
 
 public interface UserService {
@@ -26,5 +27,7 @@ public interface UserService {
   void updatePassword(Long id, UserDto.Password dto);
   
   void updateStatus(Long id, UserDto.Status dto);
+  
+  UserLoginLog setLoginLog(Long id);
 
 }

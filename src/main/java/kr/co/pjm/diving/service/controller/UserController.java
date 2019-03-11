@@ -20,6 +20,7 @@ import org.springframework.web.util.UriComponentsBuilder;
 import kr.co.pjm.diving.common.domain.dto.PagingDto;
 import kr.co.pjm.diving.common.domain.dto.SearchDto;
 import kr.co.pjm.diving.common.domain.entity.User;
+import kr.co.pjm.diving.common.domain.entity.UserLoginLog;
 import kr.co.pjm.diving.service.domain.dto.UserDto;
 import kr.co.pjm.diving.service.service.UserService;
 import lombok.AllArgsConstructor;
@@ -118,7 +119,19 @@ public class UserController {
 
     return ResponseEntity.ok().build();
   }
+  
+  @PostMapping(value = "/{id}/login_log", consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
+  public ResponseEntity<?> createUserLoginLog(@PathVariable("id") Long id, 
+      UriComponentsBuilder b, 
+      HttpServletRequest request)
+      throws Exception {
+    
+    UserLoginLog userLoginLog = userService.setLoginLog(id);
 
+    UriComponents uriComponents = b.path(request.getRequestURI().toString()).buildAndExpand(userLoginLog.getId());
+    return ResponseEntity.created(uriComponents.toUri()).build();
+  }
+  
   /*
    * hateoas source
   @GetMapping(value = "/{id}", produces = MediaType.APPLICATION_JSON_VALUE)

@@ -25,6 +25,7 @@ import kr.co.pjm.diving.common.domain.entity.Role;
 import kr.co.pjm.diving.common.domain.entity.User;
 import kr.co.pjm.diving.common.domain.entity.UserBasic;
 import kr.co.pjm.diving.common.domain.entity.UserDive;
+import kr.co.pjm.diving.common.domain.entity.UserLoginLog;
 import kr.co.pjm.diving.common.domain.entity.UserRole;
 import kr.co.pjm.diving.common.domain.enumeration.GenderEnum;
 import kr.co.pjm.diving.common.domain.enumeration.RoleTypeEnum;
@@ -35,6 +36,7 @@ import kr.co.pjm.diving.common.repository.RoleRepository;
 import kr.co.pjm.diving.common.repository.UserBasicRepository;
 import kr.co.pjm.diving.common.repository.UserConnectionRepasitory;
 import kr.co.pjm.diving.common.repository.UserDiveRepository;
+import kr.co.pjm.diving.common.repository.UserLoginLogRepasitory;
 import kr.co.pjm.diving.common.repository.UserRepository;
 import kr.co.pjm.diving.service.domain.dto.UserDto;
 import kr.co.pjm.diving.service.service.UserService;
@@ -55,6 +57,8 @@ public class UserServiceImpl implements UserService {
   private RoleRepository roleRepository;
 
   private UserConnectionRepasitory userConnectionRepasitory;
+  
+  private UserLoginLogRepasitory userLoginLogRepasitory;
   
   private PasswordEncoder passwordEncoder;
   
@@ -249,6 +253,21 @@ public class UserServiceImpl implements UserService {
         .build();
     
     userBasicRepository.updateUserBasic(userBasic);
+  }
+
+  @Override
+  @Transactional
+  public UserLoginLog setLoginLog(Long id) {
+    User user = userRepository.findOne(id);
+    
+    UserLoginLog userLoginLog = UserLoginLog.builder()
+        .email(user.getEmail())
+        .user(user)
+        .build();
+  
+    UserLoginLog result = userLoginLogRepasitory.save(userLoginLog);
+    
+    return result;
   }
   
 }
