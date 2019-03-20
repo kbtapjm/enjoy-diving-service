@@ -213,8 +213,8 @@ public class UserServiceImpl implements UserService {
       throw new ResourceNotFoundException(String.valueOf(id));
     }
     
-    userBasicRepository.delete(id);
-    userDiveRepository.delete(id);
+    userBasicRepository.delete(user.getUserBasic());
+    userDiveRepository.delete(user.getUserDive());
     userRepository.delete(id);
     userConnectionRepasitory.deleteUserConnection(user.getEmail());
   }
