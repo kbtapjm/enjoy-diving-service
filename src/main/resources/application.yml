@@ -15,7 +15,8 @@ spring:
     active: dev
   http:
     encoding:
-      charset: UTF-8    
+      charset: UTF-8
+  cloud:    config:      uri: http://localhost:8888 
 security:
   basic:
     enabled: false
@@ -23,7 +24,7 @@ management:
   security:
     enabled: false
   context-path: /application
-  port: 9091
+  port: 9094
 endpoints:
   sensitive: false 
   beans:
@@ -66,9 +67,9 @@ props:
 spring:
   profiles: dev
   datasource:
-    url: ENC(JhbAOrO9c0MhlBJkcBhM15vkfabBJgxc4dxv+S93sxLPAcCMCjlXIfJFEBvXMNLr)
-    username: ENC(jauxnix93NIxNidJQpxZGQ==)
-    password: ENC(Jbk2+ry3C3T9suJEsBqWow==)
+    url: jdbc:mysql://localhost:3306/diving
+    username: root
+    password: 1234
     driver-class-name: com.mysql.jdbc.Driver
     sql-script-encoding: UTF-8
     #schema: classpath:database/sql/ddl-*.sql

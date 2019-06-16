@@ -26,6 +26,7 @@ import kr.co.pjm.diving.common.domain.dto.PagingDto;
 import kr.co.pjm.diving.common.domain.dto.SearchDto;
 import kr.co.pjm.diving.common.domain.entity.DiveLog;
 import kr.co.pjm.diving.common.util.StringUtil;
+import kr.co.pjm.diving.service.configuration.root.ApplicationConfiguration;
 import kr.co.pjm.diving.service.domain.dto.DiveLogDto;
 import kr.co.pjm.diving.service.service.DiveLogService;
 import lombok.AllArgsConstructor;
@@ -41,6 +42,7 @@ public class DiveLogController {
   static final String RESOURCE_PATH = "/{version}/divelogs";
 
   private DiveLogService diveLogService;
+  private final ApplicationConfiguration applicationConfiguration;
   
   @ApiOperation(value = "다이브 로그 목록 조회 API")
   @ApiImplicitParams({
@@ -82,6 +84,7 @@ public class DiveLogController {
       throws Exception {
     if (log.isDebugEnabled()) {
       log.debug("id : {}", id);
+      log.debug("applicationConfiguration : {}", applicationConfiguration.getMessage());
     }
 
     return ResponseEntity.ok(diveLogService.getById(id));
